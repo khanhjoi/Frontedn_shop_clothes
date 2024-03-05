@@ -12,7 +12,7 @@ export type Field = {
   validate: any;
 };
 
-const FormCustom = ({ template }: any) => {
+const FormCustom = ({ template, onSubmitHandle }: any) => {
   const {
     register,
     handleSubmit,
@@ -26,12 +26,18 @@ const FormCustom = ({ template }: any) => {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    reset();
+    onSubmitHandle(data)
+      .then((status: boolean) => {
+        if (status === true) {
+          reset();
+        }
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
   };
 
   const inputRegister = (name: string, validate: any) => {
-    console.log();
     if (validate.validate) {
       return register(name, {
         required: true,
@@ -77,7 +83,9 @@ const FormCustom = ({ template }: any) => {
       >
         <h1 className="text-2xl font-bold mb-4">{template.title}</h1>
         {renderInputs(template.fields)}
-        <Button color="primary" type="submit" >submit</Button>
+        <Button color="primary" type="submit">
+          {template.title}
+        </Button>
       </form>
     </div>
   );

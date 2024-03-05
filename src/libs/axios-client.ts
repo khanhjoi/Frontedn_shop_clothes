@@ -1,14 +1,14 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "https://ulitmate-blog-app-production.up.railway.app/api",
+  baseURL: "http://localhost:3333",
 });
 
 axiosClient.interceptors.request.use(
   function (config) {
-    const tokenUser = localStorage.getItem("token-user-medium");
+    const tokenUser = JSON.parse(localStorage.getItem("token"));
     if (tokenUser) {
-      config.headers.Authorization = `bearer ${tokenUser.trim()}`;
+      config.headers.Authorization = `bearer ${tokenUser?.access_token.trim()}`;
     }
     return config;
   },
@@ -17,5 +17,6 @@ axiosClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 
 export default axiosClient;

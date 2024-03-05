@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -20,12 +20,25 @@ import { IoIosSearch } from "react-icons/io";
 import Profile from "./Profile";
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { getProfile } from '../../apis/User.api';
+ 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isAcvite, setIsAcvite] = React.useState(0);
   const [isLogin, setIsLogin] = React.useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLogin(true);
+
+    try {
+      const res = getProfile();
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  },[]);  
 
   const menuItems = [
     "Profile",
@@ -160,8 +173,7 @@ const Header = () => {
           </>
         )}
         {isLogin && (
-          <NavbarItem>
-            
+          <NavbarItem>  
             <Profile />
           </NavbarItem>
         )}
