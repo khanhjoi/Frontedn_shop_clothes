@@ -1,5 +1,8 @@
-import userReducer from './user';
+import userReducer from "./user";
+
+import productReducer from "./products";
 
 export default {
-    user: userReducer
-}
+  user: userReducer,
+  products: productReducer,
+};

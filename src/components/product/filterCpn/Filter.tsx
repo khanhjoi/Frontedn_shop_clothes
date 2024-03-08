@@ -3,7 +3,6 @@ import SizeHook from "./SizeHook";
 import SliderHook from "./SliderHook";
 
 const Filter = () => {
-  console.log(`Filter rerender`);
   return (
     <div>
       <h2 className="my-4 text-medium font-semibold">LỌC SẢN PHẨM</h2>

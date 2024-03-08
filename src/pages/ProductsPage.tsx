@@ -5,132 +5,29 @@ import Filter from "../components/product/filterCpn/Filter";
 import ListProduct from "../components/product/ListProduct";
 import PaginationHook from "../components/product/PaginationHook";
 import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/useSeleceter";
+import { getProduct } from "../store/slice/products";
+import { useSearchParams } from "react-router-dom";
+import { QueryType } from "../apis/Products";
 
 const ProductsPage = () => {
   const value = ["Trang chủ", "Sảm phẩm"];
+  let [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = useAppSelector(
+    (state) => state.products.pagination.currentPage
+  );
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) => state.products.products);
 
-  const products: any = [
-    {
-      mainImage:
-        "https://mcdn2.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/March2024/24CMAW.AT022.7_48.jpg",
-      type: "new",
-      name: "áo thể thao 1",
-      images: [
-        {
-          url: "http://",
-          color: "đỏ",
-        },
-        {
-          url: "http://",
-          color: "xám",
-        },
-      ],
-      discount: {
-        percent: 10,
-      },
-      price: 10000,
-    },
-    {
-      mainImage:
-        "https://mcdn2.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/March2024/24CMAW.TT009.15_39.jpg",
-      type: "new",
-      name: "áo thể thao 2",
-      images: [
-        {
-          url: "http://",
-          color: "đỏ",
-        },
-        {
-          url: "http://",
-          color: "xám",
-        },
-      ],
-      discount: {
-        percent: 10,
-      },
-      price: 10000,
-    },
-    {
-      mainImage:
-        "https://mcdn2.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/March2024/24CMAW.AT022.7_48.jpg",
-      type: "new",
-      name: "áo thể thao 1",
-      images: [
-        {
-          url: "http://",
-          color: "đỏ",
-        },
-        {
-          url: "http://",
-          color: "xám",
-        },
-      ],
-      discount: {
-        percent: 10,
-      },
-      price: 10000,
-    },
-    {
-      mainImage:
-        "https://mcdn2.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/March2024/24CMAW.TT009.15_39.jpg",
-      type: "new",
-      name: "áo thể thao 2",
-      images: [
-        {
-          url: "http://",
-          color: "đỏ",
-        },
-        {
-          url: "http://",
-          color: "xám",
-        },
-      ],
-      discount: {
-        percent: 10,
-      },
-      price: 10000,
-    },
-    {
-      mainImage:
-        "https://mcdn2.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/March2024/24CMAW.AT022.7_48.jpg",
-      type: "new",
-      name: "áo thể thao 1",
-      images: [
-        {
-          url: "http://",
-          color: "đỏ",
-        },
-        {
-          url: "http://",
-          color: "xám",
-        },
-      ],
-      discount: {
-        percent: 10,
-      },
-      price: 10000,
-    },
-    {
-      mainImage:
-        "https://mcdn2.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/March2024/24CMAW.TT009.15_39.jpg",
-      type: "new",
-      name: "áo thể thao 2",
-      images: [
-        {
-          url: "http://",
-          color: "đỏ",
-        },
-        {
-          url: "http://",
-          color: "xám",
-        },
-      ],
-      discount: {
-        percent: 10,
-      },
-      price: 10000,
-    },
-  ];
+  useEffect(() => {
+    const searchParams: QueryType = {
+      page: currentPage,
+      where: "",
+      orderBy: "",
+    };
+
+    dispatch(getProduct(searchParams));
+  }, [currentPage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
