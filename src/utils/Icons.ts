@@ -11,10 +11,13 @@ import { FaArrowCircleLeft } from "react-icons/fa";
 import { FaArrowCircleRight } from "react-icons/fa";
 import { FaPhoneAlt, FaMailBulk } from "react-icons/fa";
 import { SiZalo, SiFacebook, SiTiktok, SiLinkedin } from "react-icons/si";
+import { CiShoppingCart } from "react-icons/ci";
+import { FaPlus, FaMinus } from "react-icons/fa6";
 
 const icons = {
   CiImageOn,
   CiUser,
+  CiShoppingCart,
   IoIosSearch,
   IoIosLogOut,
   AiFillLike,
@@ -28,6 +31,8 @@ const icons = {
   FaArrowCircleRight,
   FaPhoneAlt,
   FaMailBulk,
+  FaPlus,
+  FaMinus,
   SiZalo,
   SiFacebook,
   SiTiktok,

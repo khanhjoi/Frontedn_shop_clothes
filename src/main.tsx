@@ -3,13 +3,15 @@ import App from "./App.tsx";
 import "./index.css";
 import { NextUIProvider } from "@nextui-org/react";
 import ReactQuery from "./libs/react-query.tsx";
-import Header from "./components/header/Header.tsx";
-import Footer from "./components/Footer.tsx";
+import { Provider } from "react-redux";
+import { store } from "./store/store.ts";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <NextUIProvider>
-    <ReactQuery>
-      <App></App>
-    </ReactQuery>
-  </NextUIProvider>
+  <Provider store={store}>
+    <NextUIProvider>
+      <ReactQuery>
+        <App></App>
+      </ReactQuery>
+    </NextUIProvider>
+  </Provider>
 );

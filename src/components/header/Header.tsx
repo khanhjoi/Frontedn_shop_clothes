@@ -20,25 +20,27 @@ import { IoIosSearch } from "react-icons/io";
 import Profile from "./Profile";
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { getProfile } from '../../apis/User.api';
- 
+import { getUserProfile } from "../../store/slice/user";
+import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
+import { Badge } from "@nextui-org/react";
+import icons from "../../utils/Icons";
+import Cart from "./Cart";
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isAcvite, setIsAcvite] = React.useState(0);
   const [isLogin, setIsLogin] = React.useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLogin(true);
-
-    try {
-      const res = getProfile();
-      console.log(res);
-    } catch (error) {
-      console.log(error);
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLogin(true);
+      dispatch(getUserProfile());
     }
-  },[]);  
+  }, []);
 
   const menuItems = [
     "Profile",
@@ -173,8 +175,9 @@ const Header = () => {
           </>
         )}
         {isLogin && (
-          <NavbarItem>  
-            <Profile />
+          <NavbarItem className="flex">
+            <Cart />
+            <Profile user={user} />
           </NavbarItem>
         )}
       </NavbarContent>

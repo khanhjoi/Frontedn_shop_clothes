@@ -16,8 +16,6 @@ const Contact = (className: any) => {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
-  console.log(watch("example"));
-
   return (
     <div
       id="contact"

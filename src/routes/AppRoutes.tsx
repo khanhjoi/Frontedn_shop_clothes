@@ -5,7 +5,11 @@ import path from "../utils/path";
 
 const router = createBrowserRouter([
   {
-    path: path.HOME,
+    path: path.HOME ,
+    element: <Home />,
+  },
+  {
+    path: path.HOME2 ,
     element: <Home />,
   },
   {

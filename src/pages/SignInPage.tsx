@@ -10,6 +10,7 @@ const SignInPage = () => {
   const onSubmitHandle = async (data: SignRes) => {
     try {
       const value = await signIn(data);
+      console.log(value);
       if(value) {
         localStorage.setItem('token', JSON.stringify(value));
         navigate('/');
