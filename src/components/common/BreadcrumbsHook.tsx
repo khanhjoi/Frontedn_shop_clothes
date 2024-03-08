@@ -6,11 +6,11 @@ const BreadcrumbsHook = ({ list }: any) => {
     <Breadcrumbs>
       {list &&
         list.length > 0 &&
-        list.map((item: any) => <BreadcrumbItem>
-          <Link to={`/${item}`}>
-            {item}
-          </Link>
-        </BreadcrumbItem>)}
+        list.map((item: any, index: number) => (
+          <BreadcrumbItem key={index}>
+            <Link to={`/${item}`}>{item}</Link>
+          </BreadcrumbItem>
+        ))}
     </Breadcrumbs>
   );
 };
