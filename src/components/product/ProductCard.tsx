@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 const ProductCard = ({ product, className }: any) => {
   return (
-    <Link to={`/products/${product?.index}`}>
+    <Link to={`/products/${product?.id}`}>
       <Card
-        key={product?.index}
+        key={product?.id}
         shadow="sm"
         isPressable
         className={`h-[24rem] min-w-[14rem] mx-2 my-2 ${className}`}

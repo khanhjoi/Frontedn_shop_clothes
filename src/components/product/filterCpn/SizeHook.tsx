@@ -10,7 +10,6 @@ const SizeHook = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log(selected)
     dispatch(setSize(selected));
   }, [selected]);
 

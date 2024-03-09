@@ -13,21 +13,35 @@ import { QueryType } from "../apis/Products";
 const ProductsPage = () => {
   const value = ["Trang chủ", "Sảm phẩm"];
   let [searchParams, setSearchParams] = useSearchParams();
+
   const currentPage = useAppSelector(
     (state) => state.products.pagination.currentPage
   );
   const dispatch = useAppDispatch();
   const products = useAppSelector((state) => state.products.products);
+  const category = useAppSelector((state) => state.products.filter.category);
+  const gte = useAppSelector((state) => state.products.filter.gte);
+  const lte = useAppSelector((state) => state.products.filter.lte);
 
   useEffect(() => {
+    let whereQuery:any = {
+      price: {
+        gte: gte,
+        lte: lte,
+      },
+    };
+   
+    if (category !== 0) {
+      whereQuery.categoryId = category;
+    }
     const searchParams: QueryType = {
       page: currentPage,
-      where: "",
+      where: JSON.stringify(whereQuery),
       orderBy: "",
     };
 
     dispatch(getProduct(searchParams));
-  }, [currentPage]);
+  }, [currentPage, gte, lte, category]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

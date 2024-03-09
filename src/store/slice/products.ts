@@ -15,10 +15,14 @@ export type ProductStore = {
 };
 
 export type Filter = {
-  priceFrom: number;
-  priceTo: number;
-  rating: number;
-  size: string;
+  gte: number;
+  lte: number;
+  category: number;
+};
+
+export type PriceType = {
+  gte: number;
+  lte: number;
 };
 
 export type Pagination = {
@@ -29,10 +33,9 @@ export type Pagination = {
 const initialState: ProductStore = {
   products: [],
   filter: {
-    priceFrom: 0,
-    priceTo: 10000,
-    rating: 0,
-    size: "",
+    gte: 0,
+    lte: 9000000,
+    category: 0,
   },
   pagination: {
     currentPage: 1,
@@ -59,14 +62,14 @@ const productsSlice = createSlice({
   reducers: {
     setInfo: (state, action) => {},
     setPrice: (state, action) => {
-      state.filter.priceFrom = action.payload[0];
-      state.filter.priceTo = action.payload[1];
+      state.filter.gte = action.payload[0];
+      state.filter.lte = action.payload[1];
     },
-    setRating: (state, action) => {
-      console.log(action.payload);
+    setCategory: (state, action) => {
+      state.filter.category = action.payload;
     },
     setSize: (state, action) => {
-      state.filter.size = action.payload;
+      // state.filter. = action.payload;
     },
     setPagination: (state, action) => {
       state.pagination.currentPage = action.payload;
@@ -87,5 +90,6 @@ const productsSlice = createSlice({
 });
 
 const { actions, reducer } = productsSlice;
-export const { setInfo, setPrice, setRating, setSize, setPagination } = actions;
+export const { setInfo, setPrice, setCategory, setSize, setPagination } =
+  actions;
 export default reducer;
