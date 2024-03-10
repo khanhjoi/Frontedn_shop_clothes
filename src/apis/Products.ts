@@ -21,4 +21,13 @@ const getProducts = async (queryPrams: QueryType) => {
   }
 };
 
-export { getProducts };
+const getProduct = async (id : number) => {
+  try {
+    const response = await axiosClient.get(`/products/${id}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { getProducts, getProduct };

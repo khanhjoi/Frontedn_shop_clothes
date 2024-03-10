@@ -2,7 +2,13 @@ import React from "react";
 import RatingHook from "../product/filterCpn/RatingHook";
 import { Button, Input } from "@nextui-org/react";
 import icons from "../../utils/Icons";
-const ProductInfo = () => {
+import { ProductDetailType } from "../../types/TProductDetail";
+
+interface ProductInfoProps {
+  product: ProductDetailType;
+}
+
+const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   const [numberProduct, setNumberProduct] = React.useState("1");
 
   const handleNumberChange = (newValue: string) => {
@@ -14,6 +20,7 @@ const ProductInfo = () => {
       setNumberProduct(newValue);
     }
   };
+
   return (
     <div className="flex w-full flex-col">
       <div className="w-full mt-4">
@@ -21,7 +28,7 @@ const ProductInfo = () => {
       </div>
       <div className="w-full mt-4">
         <div className="text-2xl font-bold">
-          10.4444đ
+          {product?.price}
           <span className="text-slate-400 line-through ml-4">13.4444đ</span>
           <span className=" text-red-600 text-xl">-30%</span>
         </div>
