@@ -13,10 +13,12 @@ import { FaPhoneAlt, FaMailBulk } from "react-icons/fa";
 import { SiZalo, SiFacebook, SiTiktok, SiLinkedin } from "react-icons/si";
 import { CiShoppingCart } from "react-icons/ci";
 import { FaPlus, FaMinus } from "react-icons/fa6";
-
+import { IoTimerOutline } from "react-icons/io5";
+import { CiDeliveryTruck } from "react-icons/ci";
 const icons = {
   CiImageOn,
   CiUser,
+  CiDeliveryTruck,
   CiShoppingCart,
   IoIosSearch,
   IoIosLogOut,
@@ -37,6 +39,7 @@ const icons = {
   SiFacebook,
   SiTiktok,
   SiLinkedin,
+  IoTimerOutline
 };
 
 export default icons;

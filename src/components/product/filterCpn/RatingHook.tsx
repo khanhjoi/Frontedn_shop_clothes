@@ -3,11 +3,10 @@ import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/useSeleceter";
 import { useDispatch } from "react-redux";
 
-const RatingHook = ({ showValue, isRating, ratingProps }: any) => {
+const RatingHook = ({ showValue, isRating, ratingProps, className }: any) => {
 
   const desc = ["Rất tệ", "Tệ", "Bình thường", "Tốt", "Tuyệt vời"];
-  
-  console.log(ratingProps)
+
   const [rating, setRating] = useState(ratingProps);
 
   const handleRating = (value: number) => {
@@ -16,7 +15,7 @@ const RatingHook = ({ showValue, isRating, ratingProps }: any) => {
   };
 
   return (
-    <Flex gap="middle" vertical>
+    <Flex gap="middle" vertical >
       <Rate
         disabled={!isRating}
         tooltips={desc}
@@ -24,7 +23,7 @@ const RatingHook = ({ showValue, isRating, ratingProps }: any) => {
           handleRating(e);
         }}
         value={rating}
-        className="text-blue-600"
+        className={`text-blue-600 ${className}`}
       />
       {showValue && <>{rating ? <span>{desc[rating - 1]}</span> : null}</>}
     </Flex>

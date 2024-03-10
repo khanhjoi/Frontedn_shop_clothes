@@ -1,9 +1,9 @@
 import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 
-const BreadcrumbsHook = ({ list }: any) => {
+const BreadcrumbsHook = ({ list, className }: any) => {
   return (
-    <Breadcrumbs>
+    <Breadcrumbs className={`${className}`}>
       {list &&
         list.length > 0 &&
         list.map((item: any, index: number) => (
