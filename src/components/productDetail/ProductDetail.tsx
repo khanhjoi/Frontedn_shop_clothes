@@ -15,6 +15,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   product,
   className,
 }: any) => {
+
   const [numberProduct, setNumberProduct] = React.useState("1");
 
   return (
@@ -25,7 +26,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
           <ProductInfo product={product} />
         </Tab>
         <Tab key="ProductRating" title="Đánh giá sản phẩm">
-          <ProductComment />
+          <ProductComment ratings={product.rating}/>
         </Tab>
       </Tabs>
     </div>

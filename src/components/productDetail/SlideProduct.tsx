@@ -62,7 +62,6 @@ const SlideProduct: React.FC<SlideProductProps> = ({
           src={imageActive && imageActive.filePath}
           alt=""
         />
-
         <icons.FaArrowCircleLeft
           size={26}
           onClick={prevSlide}

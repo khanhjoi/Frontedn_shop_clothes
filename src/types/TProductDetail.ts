@@ -5,7 +5,7 @@ export type ProductDetailType = {
   images: Images[];
   name: string;
   price: string;
-  rating: any;
+  rating: Rating[];
 };
 
 export type Images = {
@@ -20,4 +20,12 @@ export type Rating = {
   rating: number;
   userId: number;
   productId: number;
+  User: UserComment;
+};
+
+export type UserComment = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  avt?: string;
 };
