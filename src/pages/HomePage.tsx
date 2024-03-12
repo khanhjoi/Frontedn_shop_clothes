@@ -14,6 +14,7 @@ const Home = () => {
 
   const products: any = [
     {
+      id: 1,
       mainImage:
         "https://mcdn2.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/March2024/24CMAW.AT022.7_48.jpg",
       type: "new",
@@ -34,6 +35,7 @@ const Home = () => {
       price: 10000,
     },
     {
+      id: 11,
       mainImage:
         "https://mcdn2.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/March2024/24CMAW.TT009.15_39.jpg",
       type: "new",

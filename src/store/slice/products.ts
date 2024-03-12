@@ -57,7 +57,7 @@ export const getProduct = createAsyncThunk(
 );
 
 const productsSlice = createSlice({
-  name: "user",
+  name: "products ",
   initialState,
   reducers: {
     setInfo: (state, action) => {},

@@ -20,25 +20,25 @@ import { IoIosSearch } from "react-icons/io";
 import Profile from "./Profile";
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { getUserProfile } from "../../store/slice/user";
-import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
-import { Badge } from "@nextui-org/react";
-import icons from "../../utils/Icons";
+import { getUserProfile, setIsLogin } from "../../store/slice/user";
 import Cart from "./Cart";
+import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isAcvite, setIsAcvite] = React.useState(0);
-  const [isLogin, setIsLogin] = React.useState(false);
+  const isLogin = useAppSelector((state) => state.user.isLogin);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (token) {
-      setIsLogin(true);
+      dispatch(setIsLogin(true));
       dispatch(getUserProfile());
+    } else {
+      dispatch(setIsLogin(false));
     }
   }, []);
 

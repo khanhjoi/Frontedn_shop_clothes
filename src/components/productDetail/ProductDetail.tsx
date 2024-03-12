@@ -15,7 +15,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   product,
   className,
 }: any) => {
-
+  
   const [numberProduct, setNumberProduct] = React.useState("1");
 
   return (

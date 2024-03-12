@@ -12,7 +12,7 @@ const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
 
   return (
     <div className="w-full mt-4 ">
-      <div className="border-b-1 pb-4">
+      <div className="mb-4">
         <Textarea
           // variant="underlined"
           label="Đánh giá của bạn: "
@@ -24,12 +24,10 @@ const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
         <RatingHook className="mt-4" isRating={true} />
         <Button className="mt-4 text-end">Đánh giá</Button>
       </div>
-
-      <Card>
-        <CardBody className="max-h-[28rem]">
-          {ratings &&
-            ratings.length > 0 &&
-            ratings.map((rating: Rating) => (
+      {ratings && ratings.length > 0 && (
+        <Card>
+          <CardBody className="max-h-[28rem]">
+            {ratings.map((rating: Rating) => (
               <div className="py-4 ">
                 <div className="flex gap-5 ">
                   <Avatar
@@ -44,7 +42,7 @@ const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
                       {rating.User.firstName} {rating.User.firstName}
                     </h4>
                     <h5 className="text-small tracking-tight text-default-400">
-                    {rating.User.email}
+                      {rating.User.email}
                       <RatingHook
                         ratingProps={rating.rating}
                         className="mt-2"
@@ -56,8 +54,9 @@ const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
                 <div className="text-[0.8rem] m-4">{rating.comment}</div>
               </div>
             ))}
-        </CardBody>
-      </Card>
+          </CardBody>
+        </Card>
+      )}
     </div>
   );
 };

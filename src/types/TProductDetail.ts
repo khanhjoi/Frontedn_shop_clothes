@@ -2,13 +2,20 @@ export type ProductDetailType = {
   id: number;
   categoryId: number;
   description: string;
-  images: Images[];
+  colors: Color[];
   name: string;
   price: string;
   rating: Rating[];
+  sizes: Size[];
 };
 
-export type Images = {
+export type Color {
+  color: string;
+  codeColor: string;
+  images: Image[];
+}
+
+export type Image = {
   filePath: string;
   color: string;
   captions?: string;
@@ -21,6 +28,12 @@ export type Rating = {
   userId: number;
   productId: number;
   User: UserComment;
+};
+
+export type Size = {
+  id?: number;
+  name: string;
+  caption: string;
 };
 
 export type UserComment = {

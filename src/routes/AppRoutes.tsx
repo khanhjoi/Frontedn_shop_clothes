@@ -3,6 +3,7 @@ import { Home, Products, SignIn, SignUp } from "../pages/";
 import { RouterProvider } from "../libs/router-provider";
 import path from "../utils/path";
 import ProductDetailPage from "../pages/ProductDetailPage";
+import UserDetailPage from "../pages/UserDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: path.PRODUCT_DETAIL,
     element: <ProductDetailPage />,
+  },
+  {
+    path: path.USER_DETAIL,
+    element: <UserDetailPage />,
   },
 ]);
 

@@ -6,13 +6,17 @@ import BreadcrumbsHook from "../components/common/BreadcrumbsHook";
 import SlideProduct from "../components/productDetail/SlideProduct";
 import ProductDetail from "../components/productDetail/ProductDetail";
 import { getProduct } from "../apis/Products";
-import { Product } from "../store/slice/products";
 import { ProductDetailType } from "../types/TProductDetail";
+import { useAppDispatch, useAppSelector } from "../hooks/useSeleceter";
+import { setActiveSlide } from "../store/slice/product";
 
 const ProductDetailPage = () => {
   let { id } = useParams();
-  const [product, setProduct] = useState<ProductDetailType>();
   const value = ["Trang chủ", "Sảm phẩm", "Chi tiết sản phẩm"];
+
+  const dispatch = useAppDispatch();
+  const [product, setProduct] = useState<ProductDetailType>();
+  const images = useAppSelector((state) => state.product.slide.images);
 
   useEffect(() => {
     try {
@@ -21,6 +25,11 @@ const ProductDetailPage = () => {
         if (!isNaN(parsedId)) {
           getProduct(parsedId).then((data: any) => {
             setProduct(data);
+            dispatch(setActiveSlide({
+              activeIndex: 0,
+              color: data.colors[0].color,
+              images: data.colors[0].images
+            }))
           });
         } else {
           console.error("Invalid id:", id);
@@ -31,15 +40,13 @@ const ProductDetailPage = () => {
     }
   }, []);
 
-  console.log("Product Detail");
-
   return (
     <>
       <Header />
       <div className="px-container">
         <BreadcrumbsHook list={value} className="mt-4" />
         <div className="w-full lg:flex lg:justify-between my-10">
-          {product && <SlideProduct images={product.images} />}
+          {product && <SlideProduct images={images}/>}
           {product && (
             <ProductDetail
               product={product}

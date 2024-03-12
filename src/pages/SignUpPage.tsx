@@ -1,13 +1,28 @@
 import FormCustom from "../components/common/FormCustom";
-import { FormProvider, useForm } from 'react-hook-form';
-
+import { useForm } from "react-hook-form";
+import { SigUpReq } from "../types/TAuth";
+import { Link, useNavigate } from "react-router-dom";
+import { openNotification } from "../helpers/showNotification";
+import { Notification } from "../types/TNotification";
+import { signUp } from "../apis/Auth.api";
 
 const SignUpPage = () => {
-  const methods = useForm(); 
-  const { watch } = methods; 
+  const methods = useForm();
+  const { watch } = methods;
+  const navigate = useNavigate();
 
   let template = {
     title: "Sign Up",
+    navigate: [
+      {
+        to: "/",
+        caption: "Trở về trang chủ",
+      },
+      {
+        to: "/signin",
+        caption: "Đăng nhập",
+      },
+    ],
     fields: [
       {
         name: "firstName",
@@ -72,8 +87,8 @@ const SignUpPage = () => {
           maxLength: 20,
           pattern: {
             value: /^.{8,}$/,
-            message: "Password must be greater than 8 characters"
-          }
+            message: "Password must be greater than 8 characters",
+          },
         },
       },
       ,
@@ -87,7 +102,7 @@ const SignUpPage = () => {
           required: true,
           maxLength: 20,
           validate: (val: string) => {
-            if (watch('password') != val) {
+            if (watch("password") != val) {
               return "Your passwords do no match";
             }
           },
@@ -104,13 +119,30 @@ const SignUpPage = () => {
     },
   };
 
-  const onSubmitHandle = () => {
-    console.log("onSubmitHandle");
-  }
+  const onSubmitHandle = async (data: SigUpReq) => {
+    try {
+      const value = await signUp(data);
+      if (value) {
+        localStorage.setItem("token", JSON.stringify(value));
+        navigate("/");
+      }
+      return true;
+    } catch (errorData: any) {
+
+      const message: Notification = {
+        message: errorData?.message,
+        description: errorData?.response?.data?.message,
+        type: "error",
+      };
+      
+      openNotification(message);
+      return false;
+    }
+  };
 
   return (
     <div>
-      <FormCustom template={template} handleSubmit={onSubmitHandle} />
+      <FormCustom template={template} onSubmitHandle={onSubmitHandle} />
     </div>
   );
 };

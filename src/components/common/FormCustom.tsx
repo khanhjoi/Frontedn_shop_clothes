@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input } from "@nextui-org/react";
+import { Link } from "react-router-dom";
 
 export type Field = {
   label: string;
@@ -86,6 +87,11 @@ const FormCustom = ({ template, onSubmitHandle }: any) => {
         <Button color="primary" type="submit">
           {template.title}
         </Button>
+        <div className="mt-2 flex justify-between w-full">
+          {template.navigate && template.navigate.map((item:any, index:number) => (
+            <Link key={index} to={item?.to} className="text-sm text-slate-500 hover:text-blue-600 ">{item?.caption}</Link>
+          ))}
+        </div>
       </form>
     </div>
   );

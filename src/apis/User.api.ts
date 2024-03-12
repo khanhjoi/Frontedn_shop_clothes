@@ -1,5 +1,5 @@
 import axiosClient from "../libs/axios-client";
-
+import { updateProductReq } from "../types/TCart";
 
 const getProfile = async () => {
   try {
@@ -10,4 +10,13 @@ const getProfile = async () => {
   }
 };
 
-export { getProfile };
+const updateProductInCart = async (data: updateProductReq) => {
+  try {
+    const response = await axiosClient.post("/users/cart", data);
+    return response; // Return data if needed
+  } catch (error) {
+    throw error; // Rethrow error or handle it accordingly
+  }
+};
+
+export { getProfile, updateProductInCart};

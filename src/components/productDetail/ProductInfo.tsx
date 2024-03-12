@@ -3,13 +3,22 @@ import RatingHook from "../product/filterCpn/RatingHook";
 import { Button, Input } from "@nextui-org/react";
 import icons from "../../utils/Icons";
 import { ProductDetailType } from "../../types/TProductDetail";
+import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
+import { setActiveSlide } from "../../store/slice/product";
+import { openNotification } from "../../helpers/showNotification";
+import { updateProductInCart } from "../../apis/User.api";
+import { updateProductReq } from "../../types/TCart";
 
 interface ProductInfoProps {
   product: ProductDetailType;
 }
 
 const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
+  const dispatch = useAppDispatch();
   const [numberProduct, setNumberProduct] = React.useState("1");
+  const [activeNumber, setActiveNumber] = React.useState(-1);
+  const [activeSize, setActiveSize] = React.useState<any>({});
+  const colorStore = useAppSelector((state) => state.product.slide.color);
 
   const handleNumberChange = (newValue: string) => {
     // Convert newValue to a number
@@ -18,6 +27,57 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     if (!isNaN(parsedValue) && parsedValue > 0) {
       // Update the state only if the value is valid
       setNumberProduct(newValue);
+    }
+  };
+
+  const handleSelectSize = (index: number) => {
+    setActiveNumber(index);
+    setActiveSize(product.sizes[index]); // Update state with the selected size object
+  };
+
+  const handleSelectColor = (item: any, index: number) => {
+    dispatch(
+      setActiveSlide({
+        activeNumber: index,
+        color: item.color,
+        images: item.images,
+      })
+    );
+  };
+
+  const handleOnClickAdd = async () => {
+    if (Object.keys(activeSize).length === 0) {
+      openNotification({
+        message: "Cảnh báo",
+        description: "Vui lòng chọn kích thước",
+        type: "error",
+      });
+    } else {
+      try {
+        const data: updateProductReq = {
+          size: activeSize.name,
+          color: colorStore,
+          productId: product?.id,
+          quantity: parseInt(numberProduct),
+        };
+        const productAdd = await updateProductInCart(data);
+
+        if (productAdd) {
+          openNotification({
+            message: "Thành công",
+            description: "Đã thêm thành công",
+            type: "success",
+          });
+        } else {
+          openNotification({
+            message: "Cảnh báo",
+            description: "Có lỗi xảy ra",
+            type: "error",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -34,17 +94,45 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
         </div>
       </div>
       <div className="w-full mt-4 font-medium">
-        <h1>Kích thước: (size sm)</h1>
+        <h1>Màu sắc: {colorStore}</h1>
+        <div className="flex w-3/5 mt-2 items-center">
+          {product?.colors &&
+            product.colors.length > 0 &&
+            product.colors.map((color, index) => (
+              <Button
+                key={index}
+                onClick={() => {
+                  handleSelectColor(color, index);
+                }}
+                radius="full"
+                variant={`${
+                  colorStore === color.color ? "shadow" : "bordered"
+                }`}
+                size={`${colorStore === color.color ? "md" : "sm"}`}
+                style={{ backgroundColor: `${color.codeColor}` }}
+                className={`font-medium mx-2 transition-all duration-100 `}
+              ></Button>
+            ))}
+        </div>
+      </div>
+      <div className="w-full mt-4 font-medium">
+        <h1>Kích thước: {activeSize?.caption}</h1>
         <div className="flex w-3/5 mt-2">
-          <Button radius="full" color="primary" className="font-medium mx-2">
-            X
-          </Button>
-          <Button radius="full" className="font-medium mx-2">
-            XL
-          </Button>
-          <Button radius="full" className="font-medium mx-2">
-            M
-          </Button>
+          {product?.sizes &&
+            product.sizes.length > 0 &&
+            product.sizes.map((size, index) => (
+              <Button
+                key={index}
+                onClick={() => {
+                  handleSelectSize(index);
+                }}
+                radius="full"
+                color={`${index === activeNumber ? "primary" : "default"}`}
+                className="font-medium mx-2"
+              >
+                {size.name}
+              </Button>
+            ))}
         </div>
         <p className="text-small mt-4 text-blue-600">Miễn phí giao hàng</p>
       </div>
@@ -69,6 +157,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
             color="primary"
             className="mt-6 w-2/4"
             startContent={<icons.CiShoppingCart />}
+            onClick={handleOnClickAdd}
           >
             Thêm vào giỏ hàng
           </Button>

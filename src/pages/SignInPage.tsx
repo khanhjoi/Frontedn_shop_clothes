@@ -3,25 +3,24 @@ import { signIn } from "../apis/Auth.api";
 import { SignRes } from "../types/TAuth";
 import { openNotification } from "../helpers/showNotification";
 import { Notification } from "../types/TNotification";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
   const navigate = useNavigate();
   const onSubmitHandle = async (data: SignRes) => {
     try {
       const value = await signIn(data);
-      console.log(value);
-      if(value) {
-        localStorage.setItem('token', JSON.stringify(value));
-        navigate('/');
+      if (value) {
+        localStorage.setItem("token", JSON.stringify(value));
+        navigate("/");
       }
       return true;
-    } catch (errorData:any) {
+    } catch (errorData: any) {
       const message: Notification = {
-        message : errorData?.message, 
-        description :errorData?.response?.data?.message,
-        type : "error"
-      }
+        message: errorData?.message,
+        description: errorData?.response?.data?.message,
+        type: "error",
+      };
       openNotification(message);
       return false;
     }
@@ -29,6 +28,16 @@ const SignInPage = () => {
 
   let template = {
     title: "Sign In",
+    navigate: [
+      {
+        to: "/",
+        caption: "Trở về trang chủ",
+      },
+      {
+        to: "/signup",
+        caption: "Đăng ký",
+      },
+    ],
     fields: [
       {
         name: "email",

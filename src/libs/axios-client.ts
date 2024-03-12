@@ -34,14 +34,14 @@ axiosClient.interceptors.response.use(
     return response.data;
   },
   async function (error) {
-    const { response, config } = error;
+    let { response } = error;
+    let config = error?.config;
     const status = response?.status;
 
-    // Kiểm tra mã lỗi có phải là 401 hoặc 403 hay không
-    if (status === 401 || status === 403) {
-      // Chúng ta sẽ Thực hiện kịch bản refresh token tại đây
-      localStorage.removeItem('token');
+    if (status === 401 && !config?.sent) {
+      localStorage.removeItem("token");
     }
+
     return Promise.reject(error);
   }
 );

@@ -5,6 +5,7 @@ const path = {
     SIGN_UP: "/signup",
     PRODUCTS: "/products",
     PRODUCT_DETAIL: "/products/:id",
+    USER_DETAIL: "/profile",
 }
 
 export default path
