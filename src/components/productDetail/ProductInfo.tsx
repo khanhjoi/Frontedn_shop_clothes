@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import RatingHook from "../product/filterCpn/RatingHook";
 import { Button, Input } from "@nextui-org/react";
 import icons from "../../utils/Icons";
@@ -16,12 +16,16 @@ interface ProductInfoProps {
 const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   const dispatch = useAppDispatch();
   const [numberProduct, setNumberProduct] = React.useState("1");
+  const [ratingProduct, setRatingProduct] = React.useState(0);
   const [activeNumber, setActiveNumber] = React.useState(-1);
   const [activeSize, setActiveSize] = React.useState<any>({});
   const colorStore = useAppSelector((state) => state.product.colorActive);
   const colors = useAppSelector((state) => state.product.colors);
   const sizes = useAppSelector((state) => state.product.sizes);
 
+  useEffect(() => {
+    getRatingAverage(product.rating);
+  }, [product]);
 
   const handleNumberChange = (newValue: string) => {
     // Convert newValue to a number
@@ -39,7 +43,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   };
 
   const handleSelectColor = (item: any) => {
-    dispatch(setActiveColor(item))
+    dispatch(setActiveColor(item));
   };
 
   const handleOnClickAdd = async () => {
@@ -84,10 +88,22 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     }
   };
 
+  const getRatingAverage = (ratings: any) => {
+    let sum = 0;
+    ratings.forEach((rating:any) => {
+      sum += rating.rating
+    });
+    
+    let ratingAverage = sum / ratings.length;
+    console.log(ratingAverage.toFixed(1));
+    return Math.round(ratingAverage);
+    ;
+  };
+
   return (
     <div className="flex w-full flex-col">
       <div className="w-full mt-4">
-        <RatingHook isRating={false} ratingProps={3} />
+        <RatingHook isRating={false} ratingProps={getRatingAverage(product.rating)} />
       </div>
       <div className="w-full mt-4">
         <div className="text-2xl font-bold">
@@ -101,7 +117,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
         <div className="flex w-3/5 mt-2 items-center">
           {colors &&
             colors.length > 0 &&
-            colors.map((item:any, index:number) => (
+            colors.map((item: any, index: number) => (
               <Button
                 key={index}
                 onClick={() => {

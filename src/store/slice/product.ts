@@ -6,6 +6,7 @@ export type ProductStore = {
   colors: Color[];
   sizes: any[];
   number: number;
+  newChange: boolean;
 };
 
 export type Color = {
@@ -31,10 +32,11 @@ const initialState: ProductStore = {
   colors: [],
   sizes: [],
   number: 0,
+  newChange: false
 };
 
 const productSlice = createSlice({
-  name: "user",
+  name: "product",
   initialState,
   reducers: {
     setActiveColor: (state, action) => {
@@ -49,6 +51,9 @@ const productSlice = createSlice({
     setColors: (state, action) => {
       state.colors = action.payload;
     },
+    setNewChange: (state, action) => {
+      state.newChange = action.payload;
+    }
   },
   extraReducers: (builder) => {
     // get profile
@@ -65,5 +70,5 @@ const productSlice = createSlice({
 });
 
 const { actions, reducer } = productSlice;
-export const { setActiveColor, setSizes, setColors } = actions;
+export const { setActiveColor, setSizes, setColors, setNewChange } = actions;
 export default reducer;

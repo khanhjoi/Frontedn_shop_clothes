@@ -6,13 +6,17 @@ import { useParams } from "react-router-dom";
 import { commentProduct } from "../../apis/User.api";
 import { openNotification } from "../../helpers/showNotification";
 import moment from "moment";
+import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
+import { setNewChange } from "../../store/slice/product";
 interface ProductCommentProps {
   ratings: Rating[];
 }
 
 const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
   let { id } = useParams();
-  const [ratingsState, setRatingsState] = React.useState(ratings);
+  const dispatch = useAppDispatch();
+  const [ratingsState, setRatingsState] = React.useState<any>(ratings);
+  const newChange = useAppSelector((state) => state.product.newChange)
   const [comment, setComment] = React.useState("");
   const [rating, setRating] = React.useState(0);
   const [enableBtn, setEnableBtn] = React.useState(true);
@@ -23,6 +27,10 @@ const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
     }
   }, [comment, rating]);
 
+  useEffect(() => {
+    setRatingsState(ratings)
+  }, [ratings])
+
   const handleComment = async () => {
     try {
       const data = {
@@ -32,8 +40,18 @@ const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
       if (typeof id === "string") {
         const parsedId = parseInt(id);
         if (!isNaN(parsedId)) {
-          const reponst = await commentProduct(parsedId, data);
-          console.log(reponst);
+          const response = await commentProduct(parsedId, data);
+          if(response) {
+            openNotification({
+              message: "Thành công",
+              description: "Thêm bình luận thành công",
+              type: 'success',
+            })
+            setComment('');
+            setRating(0)
+            setEnableBtn(true);
+            dispatch(setNewChange(!newChange))
+          }
         } else {
         }
       }
@@ -47,8 +65,6 @@ const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
       }
     }
   };
-
-  console.log(ratingsState)
 
   return (
     <div className="w-full mt-4 ">
@@ -73,8 +89,8 @@ const ProductComment: React.FC<ProductCommentProps> = ({ ratings }) => {
       {ratingsState && ratingsState.length > 0 && (
         <Card>
           <CardBody className="max-h-[28rem]">
-            {ratingsState.map((rating: Rating) => (
-              <div className="py-4 ">
+            {ratingsState.map((rating: Rating, index:number) => (
+              <div key={index} className="py-4 ">
                 <div className="flex justify-between">
                   <div className="flex gap-5">
                   <Avatar

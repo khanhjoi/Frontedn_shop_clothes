@@ -15,8 +15,10 @@ const ProductDetailPage = () => {
   const value = ["Trang chủ", "Sảm phẩm", "Chi tiết sản phẩm"];
 
   const dispatch = useAppDispatch();
-  const [product, setProduct] = useState<ProductDetailType>();
 
+  const changFlag = useAppSelector((state) => state.product.newChange);
+
+  const [product, setProduct] = useState<ProductDetailType>();
   useEffect(() => {
     try {
       if (typeof id === "string") {
@@ -35,7 +37,7 @@ const ProductDetailPage = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-  }, []);
+  }, [changFlag]);
 
   const getSizes = (options: any) => {
     const holderIndex = new Set();
@@ -63,8 +65,6 @@ const ProductDetailPage = () => {
     });
     return colors;
   };
-
-  
 
   return (
     <>
