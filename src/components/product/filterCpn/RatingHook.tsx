@@ -1,21 +1,27 @@
 import { Flex, Rate } from "antd";
 import React, { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/useSeleceter";
-import { useDispatch } from "react-redux";
 
-const RatingHook = ({ showValue, isRating, ratingProps, className }: any) => {
-
+const RatingHook = ({
+  showValue,
+  isRating,
+  ratingProps,
+  className,
+  setShowValue,
+}: any) => {
   const desc = ["Rất tệ", "Tệ", "Bình thường", "Tốt", "Tuyệt vời"];
 
   const [rating, setRating] = useState(ratingProps);
 
   const handleRating = (value: number) => {
     // dispatch(setRating(value));
+    if (setShowValue) {
+      setShowValue(value);
+    }
     setRating(value);
   };
 
   return (
-    <Flex gap="middle" vertical >
+    <Flex gap="middle" vertical>
       <Rate
         disabled={!isRating}
         tooltips={desc}

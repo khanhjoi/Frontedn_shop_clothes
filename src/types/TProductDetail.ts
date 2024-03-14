@@ -9,7 +9,7 @@ export type ProductDetailType = {
   sizes: Size[];
 };
 
-export type Color {
+export type Color = {
   color: string;
   codeColor: string;
   images: Image[];
@@ -17,7 +17,6 @@ export type Color {
 
 export type Image = {
   filePath: string;
-  color: string;
   captions?: string;
   id?: number;
 };
@@ -26,6 +25,7 @@ export type Rating = {
   comment: string;
   rating: number;
   userId: number;
+  dateAdd?: string;
   productId: number;
   User: UserComment;
 };

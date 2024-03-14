@@ -2,22 +2,34 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { QueryType, getProducts } from "../../apis/Products";
 
 export type ProductStore = {
-  slide: Slide;
+  colorActive: Color;
+  colors: Color[];
+  sizes: any[];
   number: number;
 };
 
-export type Slide = {
+export type Color = {
+  id: number;
   color: string;
-  images: any[];
-  activeIndex: number;
+  codeColor: string;
+  images: Image[];
+};
+
+export type Image = {
+  id: number;
+  filePath: string;
+  captions: string;
 };
 
 const initialState: ProductStore = {
-  slide: {
+  colorActive: {
+    id: -1,
     color: "",
-    activeIndex: 0,
+    codeColor: "",
     images: [],
   },
+  colors: [],
+  sizes: [],
   number: 0,
 };
 
@@ -25,13 +37,18 @@ const productSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setActiveSlide: (state, action) => {
-      console.log(action.payload)
-      state.slide.activeIndex = action.payload.index;
-      state.slide.color = action.payload.color;
-      state.slide.images = action.payload.images;
+    setActiveColor: (state, action) => {
+      state.colorActive.id = action.payload.color.id;
+      state.colorActive.color = action.payload.color.color
+      state.colorActive.codeColor = action.payload.color.codeColor
+      state.colorActive.images = action.payload.images
     },
-    
+    setSizes: (state, action) => {
+      state.sizes = action.payload;
+    },
+    setColors: (state, action) => {
+      state.colors = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // get profile
@@ -48,5 +65,5 @@ const productSlice = createSlice({
 });
 
 const { actions, reducer } = productSlice;
-export const { setActiveSlide } = actions;
+export const { setActiveColor, setSizes, setColors } = actions;
 export default reducer;

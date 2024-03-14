@@ -8,7 +8,7 @@ import ProductDetail from "../components/productDetail/ProductDetail";
 import { getProduct } from "../apis/Products";
 import { ProductDetailType } from "../types/TProductDetail";
 import { useAppDispatch, useAppSelector } from "../hooks/useSeleceter";
-import { setActiveSlide } from "../store/slice/product";
+import { setActiveColor, setColors, setSizes } from "../store/slice/product";
 
 const ProductDetailPage = () => {
   let { id } = useParams();
@@ -16,7 +16,6 @@ const ProductDetailPage = () => {
 
   const dispatch = useAppDispatch();
   const [product, setProduct] = useState<ProductDetailType>();
-  const images = useAppSelector((state) => state.product.slide.images);
 
   useEffect(() => {
     try {
@@ -25,11 +24,9 @@ const ProductDetailPage = () => {
         if (!isNaN(parsedId)) {
           getProduct(parsedId).then((data: any) => {
             setProduct(data);
-            dispatch(setActiveSlide({
-              activeIndex: 0,
-              color: data.colors[0].color,
-              images: data.colors[0].images
-            }))
+            dispatch(setColors(getColors(data.options)));
+            dispatch(setSizes(getSizes(data.options)));
+            dispatch(setActiveColor(getColors(data.options)[0]));
           });
         } else {
           console.error("Invalid id:", id);
@@ -40,13 +37,42 @@ const ProductDetailPage = () => {
     }
   }, []);
 
+  const getSizes = (options: any) => {
+    const holderIndex = new Set();
+    const sizes: any = [];
+    options.forEach((option: any) => {
+      if (!holderIndex.has(option.Size.id)) {
+        holderIndex.add(option.Size.id);
+        sizes.push(option.Size);
+      }
+    });
+    return sizes;
+  };
+
+  const getColors = (options: any) => {
+    const holderIndex = new Set();
+    const colors: any = [];
+    options.forEach((option: any) => {
+      if (!holderIndex.has(option.Color.id)) {
+        holderIndex.add(option.Color.id);
+        colors.push({
+          color: option.Color,
+          images: option.images,
+        });
+      }
+    });
+    return colors;
+  };
+
+  
+
   return (
     <>
       <Header />
       <div className="px-container">
         <BreadcrumbsHook list={value} className="mt-4" />
         <div className="w-full lg:flex lg:justify-between my-10">
-          {product && <SlideProduct images={images}/>}
+          {product && <SlideProduct />}
           {product && (
             <ProductDetail
               product={product}

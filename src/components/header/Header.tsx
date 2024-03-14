@@ -40,7 +40,7 @@ const Header = () => {
     } else {
       dispatch(setIsLogin(false));
     }
-  }, []);
+  }, [token]);
 
   const menuItems = [
     "Profile",

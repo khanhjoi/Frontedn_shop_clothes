@@ -4,7 +4,7 @@ import { Button, Input } from "@nextui-org/react";
 import icons from "../../utils/Icons";
 import { ProductDetailType } from "../../types/TProductDetail";
 import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
-import { setActiveSlide } from "../../store/slice/product";
+import { setActiveColor, setColors } from "../../store/slice/product";
 import { openNotification } from "../../helpers/showNotification";
 import { updateProductInCart } from "../../apis/User.api";
 import { updateProductReq } from "../../types/TCart";
@@ -18,7 +18,10 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   const [numberProduct, setNumberProduct] = React.useState("1");
   const [activeNumber, setActiveNumber] = React.useState(-1);
   const [activeSize, setActiveSize] = React.useState<any>({});
-  const colorStore = useAppSelector((state) => state.product.slide.color);
+  const colorStore = useAppSelector((state) => state.product.colorActive);
+  const colors = useAppSelector((state) => state.product.colors);
+  const sizes = useAppSelector((state) => state.product.sizes);
+
 
   const handleNumberChange = (newValue: string) => {
     // Convert newValue to a number
@@ -32,17 +35,11 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
 
   const handleSelectSize = (index: number) => {
     setActiveNumber(index);
-    setActiveSize(product.sizes[index]); // Update state with the selected size object
+    setActiveSize(sizes[index]); // Update state with the selected size object
   };
 
-  const handleSelectColor = (item: any, index: number) => {
-    dispatch(
-      setActiveSlide({
-        activeNumber: index,
-        color: item.color,
-        images: item.images,
-      })
-    );
+  const handleSelectColor = (item: any) => {
+    dispatch(setActiveColor(item))
   };
 
   const handleOnClickAdd = async () => {
@@ -56,7 +53,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       try {
         const data: updateProductReq = {
           size: activeSize.name,
-          color: colorStore,
+          color: colorStore.color,
           productId: product?.id,
           quantity: parseInt(numberProduct),
         };
@@ -75,8 +72,14 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
             type: "error",
           });
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        if (error?.response.status === 401) {
+          openNotification({
+            message: error?.response.status,
+            description: "Chưa đăng nhập vui lòng đăng nhập",
+            type: "error",
+          });
+        }
       }
     }
   };
@@ -94,22 +97,22 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
         </div>
       </div>
       <div className="w-full mt-4 font-medium">
-        <h1>Màu sắc: {colorStore}</h1>
+        <h1>Màu sắc: {colorStore.color}</h1>
         <div className="flex w-3/5 mt-2 items-center">
-          {product?.colors &&
-            product.colors.length > 0 &&
-            product.colors.map((color, index) => (
+          {colors &&
+            colors.length > 0 &&
+            colors.map((item:any, index:number) => (
               <Button
                 key={index}
                 onClick={() => {
-                  handleSelectColor(color, index);
+                  handleSelectColor(item);
                 }}
                 radius="full"
                 variant={`${
-                  colorStore === color.color ? "shadow" : "bordered"
+                  colorStore.color === item.color.color ? "shadow" : "bordered"
                 }`}
-                size={`${colorStore === color.color ? "md" : "sm"}`}
-                style={{ backgroundColor: `${color.codeColor}` }}
+                size={`${colorStore.color === item.color.color ? "md" : "sm"}`}
+                style={{ backgroundColor: `${item.color.codeColor}` }}
                 className={`font-medium mx-2 transition-all duration-100 `}
               ></Button>
             ))}
@@ -118,9 +121,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       <div className="w-full mt-4 font-medium">
         <h1>Kích thước: {activeSize?.caption}</h1>
         <div className="flex w-3/5 mt-2">
-          {product?.sizes &&
-            product.sizes.length > 0 &&
-            product.sizes.map((size, index) => (
+          {sizes &&
+            sizes.length > 0 &&
+            sizes.map((size, index) => (
               <Button
                 key={index}
                 onClick={() => {

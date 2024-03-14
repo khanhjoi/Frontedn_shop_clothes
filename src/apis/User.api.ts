@@ -10,6 +10,15 @@ const getProfile = async () => {
   }
 };
 
+const getCart = async () => {
+  try {
+    const response = await axiosClient.get("/users/cart");
+    return response; // Return data if needed
+  } catch (error) {
+    throw error; // Rethrow error or handle it accordingly
+  }
+};
+
 const updateProductInCart = async (data: updateProductReq) => {
   try {
     const response = await axiosClient.post("/users/cart", data);
@@ -19,4 +28,13 @@ const updateProductInCart = async (data: updateProductReq) => {
   }
 };
 
-export { getProfile, updateProductInCart};
+const commentProduct =  async (id:number, comment:any) => {
+  try {
+    const response = await axiosClient.post(`/products/${id}`, comment);
+    return response
+  } catch (error) {
+    throw error; // Rethrow error or handle it accordingly
+  }
+}
+
+export { getProfile, updateProductInCart, getCart, commentProduct};
