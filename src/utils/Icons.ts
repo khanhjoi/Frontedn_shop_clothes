@@ -15,6 +15,7 @@ import { CiShoppingCart } from "react-icons/ci";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { IoTimerOutline } from "react-icons/io5";
 import { CiDeliveryTruck } from "react-icons/ci";
+import { CiTrash } from "react-icons/ci";
 const icons = {
   CiImageOn,
   CiUser,
@@ -38,6 +39,7 @@ const icons = {
   SiZalo,
   SiFacebook,
   SiTiktok,
+  CiTrash,
   SiLinkedin,
   IoTimerOutline
 };

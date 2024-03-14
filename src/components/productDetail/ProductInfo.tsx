@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import RatingHook from "../product/filterCpn/RatingHook";
 import { Button, Input } from "@nextui-org/react";
 import icons from "../../utils/Icons";
 import { ProductDetailType } from "../../types/TProductDetail";
 import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
-import { setActiveColor, setColors } from "../../store/slice/product";
+import { setActiveColor, setColors, setNewChange } from "../../store/slice/product";
 import { openNotification } from "../../helpers/showNotification";
 import { updateProductInCart } from "../../apis/User.api";
 import { updateProductReq } from "../../types/TCart";
@@ -16,12 +16,12 @@ interface ProductInfoProps {
 const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   const dispatch = useAppDispatch();
   const [numberProduct, setNumberProduct] = React.useState("1");
-  const [ratingProduct, setRatingProduct] = React.useState(0);
   const [activeNumber, setActiveNumber] = React.useState(-1);
   const [activeSize, setActiveSize] = React.useState<any>({});
   const colorStore = useAppSelector((state) => state.product.colorActive);
   const colors = useAppSelector((state) => state.product.colors);
   const sizes = useAppSelector((state) => state.product.sizes);
+  const changFlag = useAppSelector((state) => state.product.newChange);
 
   useEffect(() => {
     getRatingAverage(product.rating);
@@ -56,11 +56,12 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     } else {
       try {
         const data: updateProductReq = {
-          size: activeSize.name,
-          color: colorStore.color,
+          sizeId: activeSize.id,
+          colorId: colorStore.id,
           productId: product?.id,
           quantity: parseInt(numberProduct),
         };
+
         const productAdd = await updateProductInCart(data);
 
         if (productAdd) {
@@ -69,6 +70,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
             description: "Đã thêm thành công",
             type: "success",
           });
+          dispatch(setNewChange(!changFlag))
         } else {
           openNotification({
             message: "Cảnh báo",
@@ -84,6 +86,13 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
             type: "error",
           });
         }
+        if(error?.response.status === 500) {
+          openNotification({
+            message: error?.response.status,
+            description: "Sản phẩm bạn chọn đã hết hàng",
+            type: "error",
+          });
+        }
       }
     }
   };
@@ -95,7 +104,6 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     });
     
     let ratingAverage = sum / ratings.length;
-    console.log(ratingAverage.toFixed(1));
     return Math.round(ratingAverage);
     ;
   };

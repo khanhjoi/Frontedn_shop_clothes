@@ -21,6 +21,7 @@ const getCart = async () => {
 
 const updateProductInCart = async (data: updateProductReq) => {
   try {
+    console.log(data)
     const response = await axiosClient.post("/users/cart", data);
     return response; // Return data if needed
   } catch (error) {

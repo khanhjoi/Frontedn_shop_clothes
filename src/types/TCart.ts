@@ -4,7 +4,7 @@ export class Cart {
 
 export type updateProductReq = {
   productId: number;
-  color: string;
-  size: string;
+  colorId: number;
+  sizeId: number;
   quantity: number;
 }
