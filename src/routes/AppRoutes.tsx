@@ -4,6 +4,7 @@ import { RouterProvider } from "../libs/router-provider";
 import path from "../utils/path";
 import ProductDetailPage from "../pages/ProductDetailPage";
 import UserDetailPage from "../pages/UserDetailPage";
+import CartPage from "../pages/CartPage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: path.USER_DETAIL,
     element: <UserDetailPage />,
+  },
+  {
+    path: path.USER_CART,
+    element: <CartPage />,
   },
 ]);
 

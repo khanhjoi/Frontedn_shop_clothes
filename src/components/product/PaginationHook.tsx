@@ -19,17 +19,19 @@ const PaginationHook = () => {
 
   return (
     <div className="w-full">
-      <Pagination
-        total={totalPages}
-        color="primary"
-        page={currentPage}
-        onChange={setCurrentPage}
-        showControls
-        showShadow={true}
-        classNames={{
-          wrapper: "mx-auto my-10",
-        }}
-      />
+      {totalPages > 0 && (
+        <Pagination
+          total={totalPages}
+          color="primary"
+          page={currentPage}
+          onChange={setCurrentPage}
+          showControls
+          showShadow={true}
+          classNames={{
+            wrapper: "mx-auto my-10",
+          }}
+        />
+      )}
     </div>
   );
 };

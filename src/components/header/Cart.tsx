@@ -11,12 +11,16 @@ import {
 } from "@nextui-org/react";
 import icons from "../../utils/Icons";
 import { useEffect, useState } from "react";
-import { getCart } from "../../apis/User.api";
+import { getCart, updateProductInCart } from "../../apis/User.api";
 import moment from "moment";
-import { useAppSelector } from "../../hooks/useSeleceter";
+import { useAppSelector, useAppDispatch } from "../../hooks/useSeleceter";
+import { openNotification } from "../../helpers/showNotification";
+import { setNewChange } from "../../store/slice/product";
+import { Empty } from "antd";
 
 const Cart = () => {
   const [products, setProducts] = useState<any>();
+  const dispatch = useAppDispatch();
   const changFlag = useAppSelector((state) => state.product.newChange);
   const [numberProduct, setNumberProduct] = useState<Number>(0);
 
@@ -28,9 +32,28 @@ const Cart = () => {
     })();
   }, [changFlag]);
 
-  const handleRemove = async (product:any) => {
-    console.log(product);
-  }
+  const handleRemove = async (product: any) => {
+    try {
+      const data: any = {
+        productId: product?.productOption?.Product?.id,
+        colorId: product?.productOption?.Color?.id,
+        sizeId: product?.productOption?.Size?.id,
+        quantity: 0,
+      };
+      const reponse = await updateProductInCart(data);
+
+      if (reponse) {
+        openNotification({
+          message: "Cập nhật sản phẩm thành công",
+          description: `Xóa sản phẩm ${product?.productOption?.Product?.name} thành công`,
+          type: "success",
+        });
+        dispatch(setNewChange(!changFlag));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <NavbarContent as="div" justify="end">
@@ -67,12 +90,11 @@ const Cart = () => {
               <p className="font-semibold text-md text-center ">GIỎ HÀNG</p>
             </DropdownItem>
           </DropdownSection>
-          <DropdownSection className=" max-h-[18rem]  overflow-auto">
-            {products &&
-              products.length > 0 &&
-              products.map((product: any) => (
+          {products && products.length > 0 && (
+            <DropdownSection className=" max-h-[18rem]  overflow-auto">
+              {products.map((product: any, index: number) => (
                 <DropdownItem
-                  key="cart"
+                  key={index}
                   className="max-h-[18rem] bg-hover-dropdown-item overflow-auto"
                   isReadOnly={true}
                 >
@@ -86,7 +108,7 @@ const Cart = () => {
                           width={60}
                           src={product?.productOption?.Product?.mainImage}
                           alt="NextUI Album Cover"
-                          className="w-[4rem] h-[4rem] object-cover"
+                          className="w-[4rem] h-[6rem] object-cover"
                         />
                         <div className="w-[12rem] ml-2 ">
                           <p className="mt-2 font-medium">
@@ -109,14 +131,30 @@ const Cart = () => {
                         <icons.CiTrash
                           size={20}
                           className="hover:text-blue-500"
-                          onClick={() => {handleRemove(product)}}
+                          onClick={() => {
+                            handleRemove(product);
+                          }}
                         />
                       </div>
                     </div>
                   </div>
                 </DropdownItem>
               ))}
-          </DropdownSection>
+            </DropdownSection>
+          )}
+          {products && products?.length === 0 && (
+            <DropdownSection>
+              <DropdownItem className="bg-hover-dropdown-item">
+                <Empty
+                  description={
+                    <h1 className="text-medium font-medium">
+                      Chưa có sản phẩm
+                    </h1>
+                  }
+                />
+              </DropdownItem>
+            </DropdownSection>
+          )}
         </DropdownMenu>
       </Dropdown>
     </NavbarContent>

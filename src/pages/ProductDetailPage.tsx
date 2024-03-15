@@ -2,17 +2,33 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/header/Header";
 import Footer from "../components/Footer";
 import { useParams } from "react-router-dom";
-import BreadcrumbsHook from "../components/common/BreadcrumbsHook";
+import BreadcrumbsHook, {
+  BreadcrumbType,
+} from "../components/common/BreadcrumbsHook";
 import SlideProduct from "../components/productDetail/SlideProduct";
 import ProductDetail from "../components/productDetail/ProductDetail";
 import { getProduct } from "../apis/Products";
 import { ProductDetailType } from "../types/TProductDetail";
 import { useAppDispatch, useAppSelector } from "../hooks/useSeleceter";
 import { setActiveColor, setColors, setSizes } from "../store/slice/product";
+import path from "../utils/path";
 
 const ProductDetailPage = () => {
   let { id } = useParams();
-  const value = ["Trang chủ", "Sảm phẩm", "Chi tiết sản phẩm"];
+  const breacdCrumValue: BreadcrumbType[] = [
+    {
+      title: "Trang chủ",
+      link: path.HOME,
+    },
+    {
+      title: "Sảm phẩm",
+      link: path.PRODUCTS,
+    },
+    {
+      title: "Chi tiết sản phẩm",
+      link: path.PRODUCT_DETAIL,
+    },
+  ];
 
   const dispatch = useAppDispatch();
 
@@ -70,7 +86,7 @@ const ProductDetailPage = () => {
     <>
       <Header />
       <div className="px-container">
-        <BreadcrumbsHook list={value} className="mt-4" />
+        <BreadcrumbsHook list={breacdCrumValue} className="mt-4" />
         <div className="w-full lg:flex lg:justify-between my-10">
           {product && <SlideProduct />}
           {product && (

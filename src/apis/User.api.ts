@@ -21,7 +21,6 @@ const getCart = async () => {
 
 const updateProductInCart = async (data: updateProductReq) => {
   try {
-    console.log(data)
     const response = await axiosClient.post("/users/cart", data);
     return response; // Return data if needed
   } catch (error) {
@@ -29,13 +28,13 @@ const updateProductInCart = async (data: updateProductReq) => {
   }
 };
 
-const commentProduct =  async (id:number, comment:any) => {
+const commentProduct = async (id: number, comment: any) => {
   try {
     const response = await axiosClient.post(`/products/${id}`, comment);
-    return response
+    return response;
   } catch (error) {
     throw error; // Rethrow error or handle it accordingly
   }
-}
+};
 
-export { getProfile, updateProductInCart, getCart, commentProduct};
+export { getProfile, updateProductInCart, getCart, commentProduct };

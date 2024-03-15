@@ -6,6 +6,7 @@ const path = {
     PRODUCTS: "/products",
     PRODUCT_DETAIL: "/products/:id",
     USER_DETAIL: "/profile",
+    USER_CART: "/cart",
 }
 
 export default path

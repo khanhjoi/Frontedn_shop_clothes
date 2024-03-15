@@ -1,6 +1,8 @@
 import Header from "../components/header/Header";
 import Footer from "../components/Footer";
-import BreadcrumbsHook from "../components/common/BreadcrumbsHook";
+import BreadcrumbsHook, {
+  BreadcrumbType,
+} from "../components/common/BreadcrumbsHook";
 import Filter from "../components/product/filterCpn/Filter";
 import ListProduct from "../components/product/ListProduct";
 import PaginationHook from "../components/product/PaginationHook";
@@ -9,9 +11,19 @@ import { useAppDispatch, useAppSelector } from "../hooks/useSeleceter";
 import { getProduct } from "../store/slice/products";
 import { useSearchParams } from "react-router-dom";
 import { QueryType } from "../apis/Products";
+import path from "../utils/path";
 
 const ProductsPage = () => {
-  const value = ["Trang chủ", "Sảm phẩm"];
+  const breacdCrumValue: BreadcrumbType[] = [
+    {
+      title: "Trang chủ",
+      link: path.HOME,
+    },
+    {
+      title: "Sảm phẩm",
+      link: path.PRODUCTS,
+    },
+  ];
   let [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = useAppSelector(
@@ -24,13 +36,13 @@ const ProductsPage = () => {
   const lte = useAppSelector((state) => state.products.filter.lte);
 
   useEffect(() => {
-    let whereQuery:any = {
+    let whereQuery: any = {
       price: {
         gte: gte,
         lte: lte,
       },
     };
-   
+
     if (category !== 0) {
       whereQuery.categoryId = category;
     }
@@ -51,7 +63,7 @@ const ProductsPage = () => {
     <>
       <Header />
       <div className="w-full px-container my-10">
-        <BreadcrumbsHook list={value} />
+        <BreadcrumbsHook list={breacdCrumValue} />
         <div className="flex w-full mt-10 justify-between h-[3rem]">
           <h1 className="font-bold text-2xl">TẤT CẢ SẢN PHẨM</h1>
         </div>

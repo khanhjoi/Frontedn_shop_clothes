@@ -15,10 +15,10 @@ const Filter = () => {
         <h1 className="font-semibold text-xl mb-4">Loại sản phẩm</h1>
         <CategoryFilter />
       </div>
-      <div className="my-4">
+      {/* <div className="my-4">
         <h1 className="font-semibold text-xl mb-4">Kích cở</h1>
        <SizeHook />
-      </div>
+      </div> */}
     </div>
   );
 };

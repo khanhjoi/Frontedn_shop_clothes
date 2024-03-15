@@ -9,11 +9,6 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Dropdown,
-  DropdownTrigger,
-  Avatar,
-  DropdownMenu,
-  DropdownItem,
   Input,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";

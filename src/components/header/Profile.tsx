@@ -9,9 +9,11 @@ import { Link } from "react-router-dom";
 import { logout } from "../../apis/Auth.api";
 import { useAppDispatch } from "../../hooks/useSeleceter";
 import { setIsLogin } from "../../store/slice/user";
+import { useNavigate } from "react-router-dom";
 
 const Profile = ({ user }: any) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const handleLogout = async () => {
     const response = await logout();
     if (response) {
@@ -43,12 +45,12 @@ const Profile = ({ user }: any) => {
           <p className="">{user.email}</p>
         </DropdownItem>
 
-        <DropdownItem key="settings">
-          <Link to={"/profile"}>Chi tết trang cá nhân</Link>
+        <DropdownItem onClick={() => navigate("/profile")} key="settings">
+          Chi tết trang cá nhân
         </DropdownItem>
 
-        <DropdownItem key="analytics">
-          <Link to={"/card"}>Giỏ hàng</Link>
+        <DropdownItem onClick={() => navigate("/cart")} key="cart">
+          Giỏ hàng
         </DropdownItem>
         <DropdownItem key="logout" color="danger" onClick={handleLogout}>
           Đăng xuất
