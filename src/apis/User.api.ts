@@ -37,4 +37,25 @@ const commentProduct = async (id: number, comment: any) => {
   }
 };
 
-export { getProfile, updateProductInCart, getCart, commentProduct };
+const getAddresses = async () => {
+  try {
+    const response = await axiosClient.get("/users/addresses");
+    return response;
+  } catch (error) {
+    throw error; // Rethrow
+  }
+};
+
+
+const addNewAddress = async (address:string) => {
+  try {
+    const response = await axiosClient.post("/users/address", {
+      nameAddress: address
+    });
+    return response;
+  } catch (error) {
+    throw error; // Rethrow
+  }
+}
+
+export { getProfile, updateProductInCart, getCart, commentProduct, getAddresses, addNewAddress };

@@ -28,7 +28,7 @@ const Cart = () => {
     (async () => {
       const cart: any = await getCart();
       setProducts(cart);
-      setNumberProduct(cart?.length);
+      setNumberProduct(getNumberCart(cart));
     })();
   }, [changFlag]);
 
@@ -53,6 +53,14 @@ const Cart = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getNumberCart = (cart: any) => {
+    let totalProduct = 0;
+    cart.forEach((product: any) => {
+      totalProduct += product.quantity;
+    });
+    return totalProduct;
   };
 
   return (

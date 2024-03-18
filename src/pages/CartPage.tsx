@@ -23,12 +23,14 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import icons from "../utils/Icons";
-import { getCart } from "../apis/User.api";
+import { getAddresses, getCart, updateProductInCart } from "../apis/User.api";
 import { useAppDispatch, useAppSelector } from "../hooks/useSeleceter";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import FormCustom from "../components/common/FormCustom";
 import AddressForm from "../components/common/AddressForm";
+import { getFormatPrice } from "../utils/formatPrice";
+import { setNewChange } from "../store/slice/product";
+import { openNotification } from "../helpers/showNotification";
 
 let templateAddress = {
   title: "Sign In",
@@ -77,8 +79,14 @@ let templateAddress = {
 };
 
 const CartPage = () => {
+  // state
   const [products, setProducts] = useState<any>();
   const [address, setAddress] = React.useState<any>(new Set([]));
+  const [addressValue, setAddressValue] = React.useState<any>([]);
+  const [numberProduct, setNumberProduct] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  // store
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
   const changFlag = useAppSelector((state) => state.product.newChange);
@@ -94,9 +102,51 @@ const CartPage = () => {
 
     (async () => {
       const cart: any = await getCart();
+      const getAddress = await getAddresses();
+      setAddressValue(getAddress);
       setProducts(cart);
+      setTotalPriceAndNumber(cart);
     })();
   }, [changFlag, token]);
+
+  const setTotalPriceAndNumber = (cart: any) => {
+    let totalProduct = 0;
+    let totalPrice = 0;
+    cart.forEach((product: any) => {
+      totalProduct += product.quantity;
+      totalPrice += product.productOption.Product.price * product.quantity;
+    });
+    setNumberProduct(totalProduct);
+    setTotalPrice(totalPrice);
+  };
+
+  const updateProduct = async (product: any, updateQuantity: number) => {
+    try {
+      const data = {
+        productId: product.productOption.Product.id,
+        colorId: product.productOption.Color.id,
+        sizeId: product.productOption.Size.id,
+        quantity: updateQuantity,
+      };
+      const response = await updateProductInCart(data);
+      dispatch(setNewChange(!changFlag));
+
+      openNotification({
+        message: "Thành công",
+        description: "Cập nhật thành công",
+        type: "success",
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleOrder = (e:any) => {
+    console.log("address", address);
+    console.log("user", user);
+    console.log("payment",  e.currentTarget.innerText);
+  }
 
   return (
     <div>
@@ -162,9 +212,13 @@ const CartPage = () => {
                       <SelectItem key="newAddress" value="Thêm địa chỉ mới">
                         Thêm địa chỉ mới
                       </SelectItem>
-                      <SelectItem key={1} value="1">
-                        địa chỉ 1
-                      </SelectItem>
+                      {addressValue &&
+                        addressValue.length > 0 &&
+                        addressValue.map((address: any) => (
+                          <SelectItem key={address.nameAddress} value={address.nameAddress}>
+                            {address.nameAddress}
+                          </SelectItem>
+                        ))}
                     </Select>
                     {address.currentKey === "newAddress" && (
                       <div>
@@ -189,13 +243,18 @@ const CartPage = () => {
                     </h1>
                     <div>
                       <h1 className="font-medium">Thông tin:</h1>
-                      <p className="font-normal mt-1">Số lượng sản phẩm: </p>
-                      <p className="font-normal mt-1">Thành tiền: </p>
+                      <p className="font-normal mt-1">
+                        Số lượng sản phẩm: {numberProduct}
+                      </p>
+                      <p className="font-normal mt-1">
+                        Thành tiền: {getFormatPrice(totalPrice)}
+                      </p>
                     </div>
                     <div className="w-full mt-4">
                       <h1 className="font-medium">phương thức thanh toán:</h1>
                       <Button
                         size="md"
+                        onClick={(e) => {handleOrder(e)}}
                         radius="full"
                         variant="bordered"
                         className="w-full  my-2"
@@ -242,10 +301,6 @@ const CartPage = () => {
                     </div>
                   </div>
                 </CardFooter>
-                <Divider />
-                <div className="my-4 flex justify-center">
-                  <Button className="w-full mx-2" radius="full" color="primary">Đặt hàng</Button>
-                </div>
               </Card>
             </div>
           </div>
@@ -288,8 +343,10 @@ const CartPage = () => {
                                 Số lượng: {product?.quantity}
                               </p>
                               <p className="mt-1 font-medium">
-                                giá tiền:{" "}
-                                {product?.productOption?.Product?.price}
+                                Giá tiền:{" "}
+                                {getFormatPrice(
+                                  product?.productOption?.Product?.price
+                                )}
                               </p>
                               <p className="mt-1 font-[0.8rem] text-slate-400">
                                 Màu: {product?.productOption?.Color?.color}/
@@ -309,12 +366,16 @@ const CartPage = () => {
                         <icons.FaMinus
                           size={20}
                           className="hover:text-blue-500 mx-1 "
-                          onClick={() => {}}
+                          onClick={() => {
+                            updateProduct(product, product.quantity - 1);
+                          }}
                         />
                         <icons.FaPlus
                           size={20}
                           className="hover:text-blue-500 mx-1"
-                          onClick={() => {}}
+                          onClick={() => {
+                            updateProduct(product, product.quantity + 1);
+                          }}
                         />
                       </div>
                     </TableCell>

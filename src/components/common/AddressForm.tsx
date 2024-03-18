@@ -1,6 +1,9 @@
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { addNewAddress } from "../../apis/User.api";
+import { useAppSelector, useAppDispatch } from "../../hooks/useSeleceter";
+import { setNewChange } from "../../store/slice/product";
 
 interface AddressFormProps {
   className?: string;
@@ -28,8 +31,19 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
       commune: "",
     },
   });
+  const changeFlag = useAppSelector((state) => state.product.newChange);
+  const dispatch = useAppDispatch();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data:any) => {
+    try {
+      const address = `${data.address}, ${data.district}, ${data.word} , ${data.commue}`
+      dispatch(setNewChange(!changeFlag));
+      const response = await addNewAddress(address)
+      console.log(response)
+    } catch (error) {
+      console.log
+    }
+  };
 
   return (
     <div className={`w-full ${className}`}>

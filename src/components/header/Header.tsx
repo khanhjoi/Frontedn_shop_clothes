@@ -29,9 +29,9 @@ const Header = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    dispatch(getUserProfile());
     if (token) {
       dispatch(setIsLogin(true));
-      dispatch(getUserProfile());
     } else {
       dispatch(setIsLogin(false));
     }

@@ -16,6 +16,10 @@ export type UserStore = {
   isLogin: boolean;
 };
 
+export type Address = {
+  nameAddress: string;
+}
+
 const initialState: UserStore = {
   user: {
     email: "",
@@ -45,7 +49,7 @@ const userSlice = createSlice({
   reducers: {
     setIsLogin: (state, action) => {
       state.isLogin = action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     // get profile
@@ -64,5 +68,5 @@ const userSlice = createSlice({
 });
 
 const { actions, reducer } = userSlice;
-export const { setIsLogin } = actions;
+export const { setIsLogin, setAddress} = actions;
 export default reducer;
