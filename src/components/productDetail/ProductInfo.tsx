@@ -108,6 +108,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     ;
   };
 
+  console.log(colors)
   return (
     <div className="flex w-full flex-col">
       <div className="w-full mt-4">

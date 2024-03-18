@@ -36,7 +36,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data:any) => {
     try {
-      const address = `${data.address}, ${data.district}, ${data.word} , ${data.commue}`
+      const address = `${data.address}`
       dispatch(setNewChange(!changeFlag));
       const response = await addNewAddress(address)
       console.log(response)
@@ -62,7 +62,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
             {...register("address", {required: true})}
           />
         </div>
-        <div className="w-full flex justify-between">
+        {/* <div className="w-full flex justify-between">
           <Select
             size="sm"
             label="Tỉnh"
@@ -76,6 +76,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
             <SelectItem key="hà nội" value="hà nội">
               Hà nội
             </SelectItem>
+            <SelectItem key="Cần Thơ" value="Cần Thơ">
+              Cần thơ
+            </SelectItem>
           </Select>
           <Select
             size="sm"
@@ -87,11 +90,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
             {...register("ward",  {required: true})}
             onSelectionChange={() => {}}
           >
-            <SelectItem key="newAddress" value="Thêm địa chỉ mới">
-              Thêm địa chỉ mới
+            <SelectItem key="Phong Điền" value="Phong Điền">
+              Phong Điền
             </SelectItem>
-            <SelectItem key={1} value="1">
-              địa chỉ 1
+            <SelectItem key="Ninh Kều" value="Ninh Kều">
+              Ninh Kều
             </SelectItem>
           </Select>
           <Select
@@ -111,7 +114,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
               địa chỉ 1
             </SelectItem>
           </Select>
-        </div>
+        </div> */}
         <Button
           type="submit"
           color="primary"

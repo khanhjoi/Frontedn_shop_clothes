@@ -17,4 +17,12 @@ export const openNotification = ({ message, description, type }: Notification): 
       duration: 3,
     });
   }
+
+  if (type === "warning") {
+    notification.warning({
+      message: message,
+      description: description,
+      duration: 3,
+    });
+  }
 };

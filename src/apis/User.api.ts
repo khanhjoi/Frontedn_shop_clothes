@@ -58,4 +58,13 @@ const addNewAddress = async (address:string) => {
   }
 }
 
-export { getProfile, updateProductInCart, getCart, commentProduct, getAddresses, addNewAddress };
+const createOrder = async (data:any) => {
+  try {
+    const response = await axiosClient.post('/user/order',data);
+    return response
+  } catch (error) {
+    throw error; 
+  }
+}
+
+export { getProfile, updateProductInCart, getCart, commentProduct, getAddresses, addNewAddress, createOrder};

@@ -23,7 +23,12 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import icons from "../utils/Icons";
-import { getAddresses, getCart, updateProductInCart } from "../apis/User.api";
+import {
+  createOrder,
+  getAddresses,
+  getCart,
+  updateProductInCart,
+} from "../apis/User.api";
 import { useAppDispatch, useAppSelector } from "../hooks/useSeleceter";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -101,11 +106,15 @@ const CartPage = () => {
     }
 
     (async () => {
-      const cart: any = await getCart();
-      const getAddress = await getAddresses();
-      setAddressValue(getAddress);
-      setProducts(cart);
-      setTotalPriceAndNumber(cart);
+      try {
+        const cart: any = await getCart();
+        const getAddress = await getAddresses();
+        setAddressValue(getAddress);
+        setProducts(cart);
+        setTotalPriceAndNumber(cart);
+      } catch (error) {
+        console.log(error);
+      }
     })();
   }, [changFlag, token]);
 
@@ -142,11 +151,47 @@ const CartPage = () => {
     }
   };
 
-  const handleOrder = (e:any) => {
-    console.log("address", address);
-    console.log("user", user);
-    console.log("payment",  e.currentTarget.innerText);
-  }
+  const handleOrder = async () => {
+    if (!address.currentKey) {
+      openNotification({
+        message: "Cảnh báo",
+        description: "Vui lòng chọn địa chỉ",
+        type: "warning",
+      });
+      return;
+    }
+
+    if(products.length <= 0) {
+      openNotification({
+        message: "Cảnh báo",
+        description: "Vui lòng chọn sản phẩm",
+        type: "warning",
+      });
+      return;
+    }
+
+    const data = {
+      total: totalPrice,
+      address: address.currentKey,
+      orderDetail: products,
+    };
+
+    try {
+      const order = await createOrder(data);
+      if (order) {
+        openNotification({
+          message: "Thành Công",
+          description: "Đặt sản phẩm thành công",
+          type: "success",
+        });
+        dispatch(setNewChange(!changFlag));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("request", data);
+  };
 
   return (
     <div>
@@ -215,7 +260,10 @@ const CartPage = () => {
                       {addressValue &&
                         addressValue.length > 0 &&
                         addressValue.map((address: any) => (
-                          <SelectItem key={address.nameAddress} value={address.nameAddress}>
+                          <SelectItem
+                            key={address.nameAddress}
+                            value={address.nameAddress}
+                          >
                             {address.nameAddress}
                           </SelectItem>
                         ))}
@@ -229,7 +277,7 @@ const CartPage = () => {
                       <>
                         <div className="mt-4 ml-6">
                           Địa chỉ đã chọn:
-                          <span className="font-normal">{address}</span>
+                          <span className="font-normal"> {address}</span>
                         </div>
                       </>
                     )}
@@ -254,7 +302,9 @@ const CartPage = () => {
                       <h1 className="font-medium">phương thức thanh toán:</h1>
                       <Button
                         size="md"
-                        onClick={(e) => {handleOrder(e)}}
+                        onClick={(e) => {
+                          handleOrder(e);
+                        }}
                         radius="full"
                         variant="bordered"
                         className="w-full  my-2"
