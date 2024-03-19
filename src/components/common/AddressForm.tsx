@@ -37,9 +37,10 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data:any) => {
     try {
       const address = `${data.address}`
-      dispatch(setNewChange(!changeFlag));
       const response = await addNewAddress(address)
-      console.log(response)
+      if(response) {
+        dispatch(setNewChange(!changeFlag));
+      }
     } catch (error) {
       console.log
     }

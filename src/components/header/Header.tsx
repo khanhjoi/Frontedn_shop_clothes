@@ -25,7 +25,8 @@ const Header = () => {
   const isLogin = useAppSelector((state) => state.user.isLogin);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.user);
+  const changeFlag = useAppSelector((state) => state.product.newChange);
+  
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const Header = () => {
     } else {
       dispatch(setIsLogin(false));
     }
-  }, [token]);
+  }, [token, changeFlag]);
 
   const menuItems = [
     "Profile",
@@ -172,7 +173,7 @@ const Header = () => {
         {isLogin && (
           <NavbarItem className="flex">
             <Cart />
-            <Profile user={user} />
+            <Profile  />
           </NavbarItem>
         )}
       </NavbarContent>

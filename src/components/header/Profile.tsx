@@ -7,11 +7,11 @@ import {
 } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import { logout } from "../../apis/Auth.api";
-import { useAppDispatch } from "../../hooks/useSeleceter";
+import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
 import { setIsLogin } from "../../store/slice/user";
 import { useNavigate } from "react-router-dom";
 
-const Profile = ({ user }: any) => {
+const Profile = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -21,6 +21,8 @@ const Profile = ({ user }: any) => {
       dispatch(setIsLogin(false));
     }
   };
+
+  const user = useAppSelector((state) => state.user.user);
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -28,10 +30,9 @@ const Profile = ({ user }: any) => {
           isBordered
           as="button"
           className="transition-transform"
-          color="secondary"
-          name="Jason Hughes"
+          color="primary"
+          name={`${user.firstName} ${user.lastName}`}
           size="sm"
-          src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="flat">

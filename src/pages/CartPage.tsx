@@ -102,6 +102,11 @@ const CartPage = () => {
 
   useEffect(() => {
     if (!token) {
+      openNotification({
+        message: "Chưa đăng nhập",
+        description: "Vui lòng đăng nhập",
+        type: "error",
+      });
       navigate("/signin");
     }
 
@@ -161,7 +166,7 @@ const CartPage = () => {
       return;
     }
 
-    if(products.length <= 0) {
+    if (products.length <= 0) {
       openNotification({
         message: "Cảnh báo",
         description: "Vui lòng chọn sản phẩm",
@@ -189,8 +194,6 @@ const CartPage = () => {
     } catch (error) {
       console.log(error);
     }
-
-    console.log("request", data);
   };
 
   return (
@@ -261,10 +264,10 @@ const CartPage = () => {
                         addressValue.length > 0 &&
                         addressValue.map((address: any) => (
                           <SelectItem
-                            key={address.nameAddress}
+                            key={`${address.nameAddress} ${address.id}`}
                             value={address.nameAddress}
                           >
-                            {address.nameAddress}
+                            {`${address.id}-${address.nameAddress}`}
                           </SelectItem>
                         ))}
                     </Select>

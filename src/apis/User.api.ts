@@ -10,6 +10,15 @@ const getProfile = async () => {
   }
 };
 
+const updateProfile = async (data: any) => {
+  try {
+    const response = await axiosClient.put("/users/profile", data);
+    return response; // Return data if needed
+  } catch (error) {
+    throw error; // Rethrow error or handle it accordingly
+  }
+};
+
 const getCart = async () => {
   try {
     const response = await axiosClient.get("/users/cart");
@@ -46,25 +55,53 @@ const getAddresses = async () => {
   }
 };
 
-
-const addNewAddress = async (address:string) => {
+const addNewAddress = async (address: string) => {
   try {
     const response = await axiosClient.post("/users/address", {
-      nameAddress: address
+      nameAddress: address,
     });
     return response;
   } catch (error) {
     throw error; // Rethrow
   }
-}
+};
 
-const createOrder = async (data:any) => {
+const deleteAddress = async (id: number) => {
   try {
-    const response = await axiosClient.post('/user/order',data);
-    return response
+    const response = await axiosClient.delete(`/users/address/${id}`);
+    return response;
   } catch (error) {
-    throw error; 
+    throw error; // Rethrow
   }
-}
+};
 
-export { getProfile, updateProductInCart, getCart, commentProduct, getAddresses, addNewAddress, createOrder};
+const getOrders = async () => {
+  try {
+    const response = await axiosClient.get(`/user/orders`);
+    return response;
+  } catch (error) {
+    throw error; // Rethrow
+  }
+};
+
+const createOrder = async (data: any) => {
+  try {
+    const response = await axiosClient.post("/user/order", data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  getProfile,
+  updateProductInCart,
+  getCart,
+  commentProduct,
+  getAddresses,
+  addNewAddress,
+  createOrder,
+  deleteAddress,
+  updateProfile,
+  getOrders
+};

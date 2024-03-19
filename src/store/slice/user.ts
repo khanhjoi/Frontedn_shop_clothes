@@ -68,5 +68,5 @@ const userSlice = createSlice({
 });
 
 const { actions, reducer } = userSlice;
-export const { setIsLogin, setAddress} = actions;
+export const { setIsLogin,} = actions;
 export default reducer;
