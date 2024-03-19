@@ -18,6 +18,7 @@ export type Filter = {
   gte: number;
   lte: number;
   category: number;
+  search: string;
 };
 
 export type PriceType = {
@@ -36,6 +37,7 @@ const initialState: ProductStore = {
     gte: 0,
     lte: 9000000,
     category: 0,
+    search: ""
   },
   pagination: {
     currentPage: 1,
@@ -48,7 +50,6 @@ export const getProduct = createAsyncThunk(
   async (searchParams: QueryType) => {
     try {
       const reponse = await getProducts(searchParams);
-      console.log(reponse);
       return reponse;
     } catch (error) {
       return error;
@@ -68,8 +69,8 @@ const productsSlice = createSlice({
     setCategory: (state, action) => {
       state.filter.category = action.payload;
     },
-    setSize: (state, action) => {
-      // state.filter. = action.payload;
+    setSearch: (state, action) => {
+      state.filter.search = action.payload;
     },
     setPagination: (state, action) => {
       state.pagination.currentPage = action.payload;
@@ -90,6 +91,6 @@ const productsSlice = createSlice({
 });
 
 const { actions, reducer } = productsSlice;
-export const { setInfo, setPrice, setCategory, setSize, setPagination } =
+export const { setInfo, setPrice, setCategory, setSearch, setPagination } =
   actions;
 export default reducer;

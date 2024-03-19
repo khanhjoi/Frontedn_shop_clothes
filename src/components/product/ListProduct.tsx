@@ -3,7 +3,6 @@ import ProductCard from "./ProductCard";
 import { Empty } from "antd";
 
 const ListProduct = ({ products }: any) => {
-  console.log("listProduct");
   return (
     <div className="flex flex-wrap justify-around">
       {products &&

@@ -8,6 +8,7 @@ export type QueryType = {
 
 const getProducts = async (queryPrams: QueryType) => {
   try {
+    console.log(queryPrams)
     const response = await axiosClient.get(
       `/products/?page=${
         queryPrams && queryPrams?.page ? queryPrams.page : ""

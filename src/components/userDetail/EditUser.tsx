@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Checkbox, Form, FormProps, Input, Modal } from "antd";
+import {
+  Checkbox,
+  Descriptions,
+  Form,
+  FormProps,
+  Input,
+  Modal,
+  message,
+} from "antd";
 import { Button } from "@nextui-org/react";
 import { updateProfile } from "../../apis/User.api";
 import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
@@ -23,8 +31,6 @@ const EditUser: React.FC<any> = ({ isModalOpen, setIsModalOpen }) => {
   const changeFlag = useAppSelector((state) => state.product.newChange);
   const dispatch = useAppDispatch();
 
- 
-
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -39,14 +45,24 @@ const EditUser: React.FC<any> = ({ isModalOpen, setIsModalOpen }) => {
       if (response) {
         dispatch(setNewChange(!changeFlag));
         form.resetFields();
-        setIsModalOpen(false)
+        setIsModalOpen(false);
         openNotification({
           message: "Thành công",
           description: "Cập nhật thông tin thành công",
-          type: "success"
-        })
+          type: "success",
+        });
       }
     } catch (error) {
+      if (
+        error?.response?.data?.statusCode === 500 &&
+        error.response?.data?.message === "email has already been taken"
+      ) {
+        openNotification({
+          message: "Cảnh báo",
+          description: "Email đã có người sử dụng!!",
+          type: "warning",
+        });
+      }
       console.error(error);
     }
   };
@@ -57,6 +73,14 @@ const EditUser: React.FC<any> = ({ isModalOpen, setIsModalOpen }) => {
     console.log("Failed:", errorInfo);
   };
 
+  const validatePhone = (_:any, value:any) => {
+    const regex = /^(0|\+84)(\d{9,10})$/; // Vietnamese phone number regex
+    if (!regex.test(value)) {
+      return Promise.reject("Số điện thoại không hợp lệ!");
+    }
+    return Promise.resolve();
+  };
+  
   return (
     <>
       <Modal
@@ -97,7 +121,11 @@ const EditUser: React.FC<any> = ({ isModalOpen, setIsModalOpen }) => {
             label="SĐT"
             name="phone"
             rules={[
-              { required: true, message: "Vui Lòng nhập số điện thoại!" },
+              { required: true, message: "Vui lòng nhập số điện thoại!" },
+              {
+                validator: validatePhone,
+                message: "Số điện thoại không hợp lệ!",
+              },
             ]}
           >
             <Input />

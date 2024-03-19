@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { getUserProfile, setIsLogin } from "../../store/slice/user";
 import Cart from "./Cart";
 import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
+import path from "../../utils/path";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -26,7 +27,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const changeFlag = useAppSelector((state) => state.product.newChange);
-  
+
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -39,16 +40,18 @@ const Header = () => {
   }, [token, changeFlag]);
 
   const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
+    {
+      name: "Trang chủ",
+      url: path.HOME,
+    },
+    {
+      name: "Sản phẩm",
+      url: path.PRODUCTS,
+    },
+    {
+      name: "Đặt thiết kế",
+      url: "/",
+    }
   ];
 
   return (
@@ -73,7 +76,7 @@ const Header = () => {
             <Link
               className={`${
                 isAcvite === 0 ? "text-blue-600" : ""
-              } font-semibold sm:text-md lg:text-xl mg:mx-2 lg:mx-4 `}
+              } font-semibold sm:text-md lg:text-xl mg:mx-2 lg:mx-4 cursor-pointer`}
               color="foreground"
               onClick={() => {
                 setIsAcvite(0);
@@ -87,7 +90,7 @@ const Header = () => {
             <Link
               className={`${
                 isAcvite === 1 ? "text-blue-600" : ""
-              } font-semibold sm:text-md lg:text-xl mg:mx-2 lg:mx-4`}
+              } font-semibold sm:text-md lg:text-xl mg:mx-2 lg:mx-4 cursor-pointer`}
               color="foreground"
               onClick={() => {
                 setIsAcvite(1);
@@ -97,7 +100,7 @@ const Header = () => {
               Sản phẩm
             </Link>
           </NavbarItem>
-          <NavbarItem>
+          {/* <NavbarItem>
             <Link
               className={`${
                 isAcvite === 2 ? "text-blue-600" : ""
@@ -110,12 +113,12 @@ const Header = () => {
             >
               Liên hệ
             </Link>
-          </NavbarItem>
+          </NavbarItem> */}
           <NavbarItem>
             <Link
               className={`${
                 isAcvite === 3 ? "text-blue-600" : ""
-              } font-semibold sm:text-md lg:text-xl mg:mx-2 lg:mx-4`}
+              } font-semibold sm:text-md lg:text-xl mg:mx-2 lg:mx-4 cursor-pointer`}
               color="foreground"
               onClick={() => {
                 setIsAcvite(3);
@@ -173,15 +176,15 @@ const Header = () => {
         {isLogin && (
           <NavbarItem className="flex">
             <Cart />
-            <Profile  />
+            <Profile />
           </NavbarItem>
         )}
       </NavbarContent>
 
       {/* nav bar reposive */}
-      <NavbarMenu>
+      <NavbarMenu className="mt-8">
         {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
+          <NavbarMenuItem key={`${item.name}-${index}`}>
             <Link
               color={
                 index === 2
@@ -191,10 +194,9 @@ const Header = () => {
                   : "foreground"
               }
               className="w-full"
-              href="#"
               size="lg"
             >
-              {item}
+              <RouterLink to={item.url}>{item.name}</RouterLink>
             </Link>
           </NavbarMenuItem>
         ))}

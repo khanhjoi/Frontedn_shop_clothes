@@ -327,7 +327,7 @@ const UserDetailPage = () => {
           aria-label="Example empty table"
           className="border-0 shadow-none "
           classNames={{
-            base: "max-h-[500px] overflow-auto",
+            base: "max-h-[440px] overflow-auto",
             table: "min-h-[400px]",
           }}
         >
@@ -344,7 +344,7 @@ const UserDetailPage = () => {
                 <TableRow key={index}>
                   <TableCell>
                     <div className="overflow-hidden ">
-                      <div className="text-medium max-w-[14rem] overflow-hidden font-bold truncate">
+                      <div className="text-medium max-w-[20rem] overflow-hidden font-bold truncate">
                         {product?.productOption?.Product?.name}
                       </div>
                       <div className="w-full flex justify-between items-center my-4">

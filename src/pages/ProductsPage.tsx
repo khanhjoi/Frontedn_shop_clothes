@@ -34,6 +34,7 @@ const ProductsPage = () => {
   const category = useAppSelector((state) => state.products.filter.category);
   const gte = useAppSelector((state) => state.products.filter.gte);
   const lte = useAppSelector((state) => state.products.filter.lte);
+  const search = useAppSelector((state) => state.products.filter.search);
 
   useEffect(() => {
     let whereQuery: any = {
@@ -41,10 +42,16 @@ const ProductsPage = () => {
         gte: gte,
         lte: lte,
       },
+      
     };
 
     if (category !== 0) {
       whereQuery.categoryId = category;
+    }
+    if(search) {
+      whereQuery.name = {
+        contains: search
+      }
     }
     const searchParams: QueryType = {
       page: currentPage,
@@ -53,7 +60,7 @@ const ProductsPage = () => {
     };
 
     dispatch(getProduct(searchParams));
-  }, [currentPage, gte, lte, category]);
+  }, [currentPage, gte, lte, category, search]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

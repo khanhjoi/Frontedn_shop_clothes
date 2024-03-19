@@ -15,7 +15,6 @@ const BreadcrumbsHook: React.FC<BreadcrumbProps> = ({
   list,
   className,
 }: any) => {
-  console.log(list);
   return (
     <Breadcrumbs className={`${className}`}>
       {list &&

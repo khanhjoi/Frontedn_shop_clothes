@@ -25,13 +25,13 @@ const ProductCard = ({ product, className }: any) => {
             color="primary"
             className="absolute z-10 shadow-sm right-2 top-2 group-hover:none"
           >
-            {product?.type}
+            new
           </Chip>
         </CardBody>
         <CardFooter className="text-small justify-between ">
           <div className="w-full overflow-hidden">
             <p className="text-medium text-wrap truncate font-semibold">
-              Áo Thun Thể thao
+              {product.name}
             </p>
             <div className="my-1">
               {product?.images &&
