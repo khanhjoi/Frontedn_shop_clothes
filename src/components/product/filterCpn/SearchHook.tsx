@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
-import { Input } from '@nextui-org/react';
-import { useDebounce } from 'use-debounce';
-import { useAppDispatch } from '../../../hooks/useSeleceter';
-import { setSearch } from '../../../store/slice/products';
-
+import React, { useEffect } from "react";
+import { Input } from "@nextui-org/react";
+import { useDebounce } from "use-debounce";
+import { useAppDispatch } from "../../../hooks/useSeleceter";
+import { setSearch } from "../../../store/slice/products";
 
 const SearchHook = () => {
   const [value, setValue] = React.useState("");
   const [debouncedValue] = useDebounce(value, 500); // Debounce value for 500 milliseconds
   const dispatch = useAppDispatch();
+  
   useEffect(() => {
-    dispatch(setSearch(debouncedValue))
+    dispatch(setSearch(debouncedValue));
   }, [debouncedValue]);
 
   return (
@@ -21,9 +21,11 @@ const SearchHook = () => {
         value={value}
         onValueChange={setValue}
       />
-      <p className="text-default-500 text-small">Sản phẩm đang tìm: {debouncedValue}</p>
+      <p className="text-default-500 text-small">
+        Sản phẩm đang tìm: {debouncedValue}
+      </p>
     </div>
   );
-}
+};
 
 export default SearchHook;

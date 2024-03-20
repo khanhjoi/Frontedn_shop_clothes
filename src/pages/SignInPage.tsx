@@ -27,7 +27,7 @@ const SignInPage = () => {
   };
 
   let template = {
-    title: "Sign In",
+    title: "Đăng nhập",
     navigate: [
       {
         to: "/",
@@ -44,7 +44,7 @@ const SignInPage = () => {
         title: "Email",
         label: "Email",
         type: "email",
-        description: "Enter your email",
+        description: "Nhập Email",
         validate: {
           required: true,
           maxLength: 20,
@@ -55,13 +55,13 @@ const SignInPage = () => {
         title: "Password",
         label: "Password",
         type: "password",
-        description: "Enter your password",
+        description: "Nhập password",
         validate: {
           required: true,
           maxLength: 20,
           pattern: {
             value: /^.{8,}$/,
-            message: "Password must be greater than 8 characters",
+            message: "Mật khẩu phải hơn 8 ký tự",
           },
         },
       },

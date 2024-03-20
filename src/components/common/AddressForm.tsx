@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { addNewAddress } from "../../apis/User.api";
 import { useAppSelector, useAppDispatch } from "../../hooks/useSeleceter";
 import { setNewChange } from "../../store/slice/product";
+import { openNotification } from "../../helpers/showNotification";
 
 interface AddressFormProps {
   className?: string;
@@ -40,6 +41,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
       const response = await addNewAddress(address)
       if(response) {
         dispatch(setNewChange(!changeFlag));
+        openNotification({
+          message: "Thành công",
+          description: "Thêm địa chỉ thành công",
+          type: "success"
+        })
       }
     } catch (error) {
       console.log
@@ -63,59 +69,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ className }) => {
             {...register("address", {required: true})}
           />
         </div>
-        {/* <div className="w-full flex justify-between">
-          <Select
-            size="sm"
-            label="Tỉnh"
-            selectedKeys=""
-            variant="bordered"
-            radius="full"
-            className="w-1/4 mt-4"
-            {...register("district",  {required: true})}
-            onSelectionChange={() => {}}
-          >
-            <SelectItem key="hà nội" value="hà nội">
-              Hà nội
-            </SelectItem>
-            <SelectItem key="Cần Thơ" value="Cần Thơ">
-              Cần thơ
-            </SelectItem>
-          </Select>
-          <Select
-            size="sm"
-            label="Huyện"
-            selectedKeys=""
-            variant="bordered"
-            radius="full"
-            className="w-1/4 mt-4"
-            {...register("ward",  {required: true})}
-            onSelectionChange={() => {}}
-          >
-            <SelectItem key="Phong Điền" value="Phong Điền">
-              Phong Điền
-            </SelectItem>
-            <SelectItem key="Ninh Kều" value="Ninh Kều">
-              Ninh Kều
-            </SelectItem>
-          </Select>
-          <Select
-            size="sm"
-            label="Xã"
-            selectedKeys=""
-            variant="bordered"
-            radius="full"
-            className="w-1/4 mt-4"
-            {...register("commune")}
-            onSelectionChange={() => {}}
-          >
-            <SelectItem key="newAddress" value="Thêm địa chỉ mới">
-              Thêm địa chỉ mới
-            </SelectItem>
-            <SelectItem key={1} value="1">
-              địa chỉ 1
-            </SelectItem>
-          </Select>
-        </div> */}
         <Button
           type="submit"
           color="primary"

@@ -12,7 +12,7 @@ const SignUpPage = () => {
   const navigate = useNavigate();
 
   let template = {
-    title: "Sign Up",
+    title: "Đăng ký",
     navigate: [
       {
         to: "/",
@@ -27,9 +27,9 @@ const SignUpPage = () => {
       {
         name: "firstName",
         title: "First Name",
-        label: "First name",
+        label: "Tên",
         type: "text",
-        description: "Enter your first name",
+        description: "Nhập Tên của bạn",
         validate: {
           required: true,
           maxLength: 20,
@@ -38,9 +38,9 @@ const SignUpPage = () => {
       {
         name: "lastName",
         title: "Last Name",
-        label: "Last name",
+        label: "Họ",
         type: "text",
-        description: "Enter your last name",
+        description: "Nhập Họ của bạn",
         validate: {
           required: true,
           maxLength: 20,
@@ -49,9 +49,9 @@ const SignUpPage = () => {
       {
         name: "email",
         title: "Email",
-        label: "Email Address",
+        label: "Địa chỉ Email",
         type: "email",
-        description: "We'll never share your email with anyone else",
+        description: "Nhập địa chỉ email của bạn",
         validate: {
           required: true,
           maxLength: 20,
@@ -64,15 +64,15 @@ const SignUpPage = () => {
       {
         name: "phone",
         title: "Phone Number",
-        label: "Phone Number",
+        label: "Số điện thoại",
         type: "phone",
-        description: "We'll never share your phone with anyone else",
+        description: "Nhập số điện thoại của bạn",
         validate: {
           required: true,
           maxLength: 20,
           pattern: {
             value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
-            message: "Invalid phone Address",
+            message: "Số điện thoại không hợp lệ!",
           },
         },
       },
@@ -81,13 +81,13 @@ const SignUpPage = () => {
         title: "Password",
         label: "Password",
         type: "password",
-        description: "Enter your password",
+        description: "Nhập mật khẩu",
         validate: {
           required: true,
           maxLength: 20,
           pattern: {
             value: /^.{8,}$/,
-            message: "Password must be greater than 8 characters",
+            message: "Mật khẩu phải hơn 8 kí tự",
           },
         },
       },
@@ -95,15 +95,15 @@ const SignUpPage = () => {
       {
         name: "passwordConfirm",
         title: "passwordConfirm",
-        label: "Password Confirm",
+        label: "Nhập lại mật khẩu",
         type: "password",
-        description: "Enter your password confirm",
+        description: "Vui lòng nhập lại mật khẩu",
         validate: {
           required: true,
           maxLength: 20,
           validate: (val: string) => {
             if (watch("password") != val) {
-              return "Your passwords do no match";
+              return "Mật khẩu nhập lại không đúng";
             }
           },
         },

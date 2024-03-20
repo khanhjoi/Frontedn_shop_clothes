@@ -35,9 +35,14 @@ axiosClient.interceptors.response.use(
   },
   async function (error) {
     let { response } = error;
-
     if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem("token");
+    }
 
+    if (
+      response.data?.message === "user not exit" &&
+      response.data.statusCode === 500
+    ) {
       localStorage.removeItem("token");
     }
 

@@ -52,7 +52,7 @@ const EditUser: React.FC<any> = ({ isModalOpen, setIsModalOpen }) => {
           type: "success",
         });
       }
-    } catch (error) {
+    } catch (error:any) {
       if (
         error?.response?.data?.statusCode === 500 &&
         error.response?.data?.message === "email has already been taken"
@@ -127,14 +127,6 @@ const EditUser: React.FC<any> = ({ isModalOpen, setIsModalOpen }) => {
                 message: "Số điện thoại không hợp lệ!",
               },
             ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item<FieldType>
-            label="email"
-            name="email"
-            rules={[{ required: true, message: "Vui Lòng nhập họ!" }]}
           >
             <Input />
           </Form.Item>
