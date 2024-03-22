@@ -4,7 +4,11 @@ import { Button, Input } from "@nextui-org/react";
 import icons from "../../utils/Icons";
 import { ProductDetailType } from "../../types/TProductDetail";
 import { useAppDispatch, useAppSelector } from "../../hooks/useSeleceter";
-import { setActiveColor, setColors, setNewChange } from "../../store/slice/product";
+import {
+  setActiveColor,
+  setColors,
+  setNewChange,
+} from "../../store/slice/product";
 import { openNotification } from "../../helpers/showNotification";
 import { updateProductInCart } from "../../apis/User.api";
 import { updateProductReq } from "../../types/TCart";
@@ -22,6 +26,8 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   const colors = useAppSelector((state) => state.product.colors);
   const sizes = useAppSelector((state) => state.product.sizes);
   const changFlag = useAppSelector((state) => state.product.newChange);
+
+  console.log(product);
 
   useEffect(() => {
     getRatingAverage(product.rating);
@@ -70,7 +76,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
             description: "Đã thêm thành công",
             type: "success",
           });
-          dispatch(setNewChange(!changFlag))
+          dispatch(setNewChange(!changFlag));
         } else {
           openNotification({
             message: "Cảnh báo",
@@ -86,7 +92,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
             type: "error",
           });
         }
-        if(error?.response.status === 500) {
+        if (error?.response.status === 500) {
           openNotification({
             message: error?.response.status,
             description: "Sản phẩm bạn chọn đã hết hàng",
@@ -99,20 +105,21 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
 
   const getRatingAverage = (ratings: any) => {
     let sum = 0;
-    ratings.forEach((rating:any) => {
-      sum += rating.rating
+    ratings.forEach((rating: any) => {
+      sum += rating.rating;
     });
-    
+
     let ratingAverage = sum / ratings.length;
     return Math.round(ratingAverage);
-    ;
   };
 
-  console.log(colors)
   return (
     <div className="flex w-full flex-col">
       <div className="w-full mt-4">
-        <RatingHook isRating={false} ratingProps={getRatingAverage(product.rating)} />
+        <RatingHook
+          isRating={false}
+          ratingProps={getRatingAverage(product.rating)}
+        />
       </div>
       <div className="w-full mt-4">
         <div className="text-2xl font-bold">
@@ -262,10 +269,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
         <div className="w-full lg:w-5/6">
           <h1 className="text-sm font-medium">Các đặt điểm nỗi bặt</h1>
           <p className="p-4 bg-slate-100 rounded-md text-[0.8rem] mt-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
-            perspiciatis tempore? Quaerat ullam molestiae id, repellat
-            aspernatur veritatis tempora beatae nemo? Laboriosam similique
-            sapiente eligendi nisi eaque amet, magni tenetur!
+            {product?.description}
           </p>
         </div>
       </div>
@@ -273,10 +277,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
         <div className="w-full lg:w-5/6">
           <h1 className="text-sm font-medium">Thông tin sản phẩm</h1>
           <p className="p-4 bg-slate-100 rounded-md text-[0.8rem] mt-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
-            perspiciatis tempore? Quaerat ullam molestiae id, repellat
-            aspernatur veritatis tempora beatae nemo? Laboriosam similique
-            sapiente eligendi nisi eaque amet, magni tenetur!
+            {product?.subDescription}
           </p>
         </div>
       </div>

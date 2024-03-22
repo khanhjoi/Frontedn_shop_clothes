@@ -27,7 +27,6 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const changeFlag = useAppSelector((state) => state.product.newChange);
-
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const Header = () => {
     } else {
       dispatch(setIsLogin(false));
     }
-  }, [token, changeFlag]);
+  }, [token, changeFlag, isLogin]);
 
   const menuItems = [
     {

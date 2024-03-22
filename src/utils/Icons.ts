@@ -19,6 +19,8 @@ import { RxAvatar } from "react-icons/rx";
 import { CiEdit } from "react-icons/ci";
 import { CiTrash } from "react-icons/ci";
 import { FaRegEye } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
+import { MdCancel } from "react-icons/md";
 const icons = {
   CiImageOn,
   CiUser,
@@ -47,7 +49,9 @@ const icons = {
   IoTimerOutline,
   RxAvatar,
   CiEdit,
-  FaRegEye
+  FaRegEye,
+  FaCheck,
+  MdCancel
 };
 
 export default icons;

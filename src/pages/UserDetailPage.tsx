@@ -8,6 +8,8 @@ import {
   CardBody,
   Chip,
   Image,
+  PopoverContent,
+  PopoverTrigger,
   Select,
   SelectItem,
   Tab,
@@ -16,6 +18,7 @@ import {
   TableCell,
   TableColumn,
   TableHeader,
+  Popover,
   TableRow,
   Tabs,
 } from "@nextui-org/react";
@@ -27,10 +30,10 @@ import { useNavigate } from "react-router-dom";
 import { openNotification } from "../helpers/showNotification";
 import { setNewChange } from "../store/slice/product";
 import EditUser from "../components/userDetail/EditUser";
-import DetailOrderModal from "../components/userDetail/DetailOrderModal";
 import { getFormatPrice } from "../utils/formatPrice";
 import { Modal } from "antd";
 import moment from "moment";
+import axiosClient from "../libs/axios-client";
 
 const UserDetailPage = () => {
   const [address, setAddress] = React.useState<any>(new Set([]));
@@ -46,8 +49,18 @@ const UserDetailPage = () => {
   const changeFlag = useAppSelector((state) => state.product.newChange);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const token = localStorage.getItem("token");
 
+  const [changeFlagOrder, setChangeFlagOrder] = useState(false);
   useEffect(() => {
+    if (!token) {
+      openNotification({
+        message: "Chưa đăng nhập",
+        description: "Vui lòng đăng nhập",
+        type: "error",
+      });
+      navigate("/signin");
+    }
     (async () => {
       try {
         const response = await getOrders();
@@ -58,7 +71,7 @@ const UserDetailPage = () => {
         console.error(error);
       }
     })();
-  }, []);
+  }, [changeFlagOrder]);
 
   useEffect(() => {
     (async () => {
@@ -79,7 +92,7 @@ const UserDetailPage = () => {
         }
       }
     })();
-  }, [changeFlag]);
+  }, [changeFlag, token]);
 
   const handleDeleteAddress = async () => {
     try {
@@ -100,21 +113,90 @@ const UserDetailPage = () => {
     }
   };
 
-  const getStatus = (status: string) => {
+  const handleUpdateOrder = async (value: any, orderId: number) => {
+    console.log(value.innerText);
+    console.log(orderId);
+    let orderStatus:string = "IS_PENDING";
+
+    if(value.innerText === "Đã Nhận Được Hàng") {
+      orderStatus = "IS_SUCCESS"
+    }else if(value.innerText === "Từ Chối") {
+      orderStatus = "IS_CANCELLED"
+    }
+    try {
+      const response = await axiosClient.put(`/user/orders/${orderId}`, {
+        orderStatus: orderStatus
+      });
+      if(response) {
+        setChangeFlagOrder(!changeFlagOrder);
+        openNotification({
+          message: `Cập nhật thành công`,
+          description: `Đơn hàng đã cập nhật`,
+          type:"success",
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getStatus = (status: string, orderId: number) => {
     switch (status) {
       case "IN_PROGRESS":
         return (
           <Chip className="capitalize" color="primary" size="sm" variant="flat">
-            Đang đặt hàng
+            Đang xử lý
           </Chip>
         );
-      case "IN_PENDING":
+      case "IS_PENDING":
         return (
-          <Chip className="capitalize" color="warning" size="sm" variant="flat">
-            Đang đặt xử lý
-          </Chip>
+          <div>
+            <Popover placement="bottom" showArrow={true}>
+              <PopoverTrigger>
+                <Chip
+                  className="capitalize cursor-pointer"
+                  color="warning"
+                  size="sm"
+                  variant="flat"
+                >
+                  Đang Gửi hàng
+                </Chip>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="px-1 py-2">
+                  <div className="text-small font-bold mb-2">
+                    Xác nhận trạng thái đơn hàng
+                  </div>
+                  <Chip
+                    startContent={<icons.FaCheck size={18} />}
+                    className="capitalize cursor-pointer mx-2"
+                    color="success"
+                    size="sm"
+                    variant="flat"
+                    onClick={(e) => {
+                      handleUpdateOrder(e.target, orderId);
+                    }}
+                  >
+                    Đã nhận được hàng
+                  </Chip>
+                  <Chip
+                    startContent={<icons.MdCancel size={18} />}
+                    className="capitalize cursor-pointer mx-2"
+                    color="warning"
+                    size="sm"
+                    variant="flat"
+                    onClick={(e) => {
+                      handleUpdateOrder(e.target, orderId);
+                    }}
+                  >
+                    Từ chối
+                  </Chip>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
         );
-      case "IN_SUCCESS":
+      case "IS_SUCCESS":
         return (
           <Chip className="capitalize" color="success" size="sm" variant="flat">
             Thành công
@@ -126,7 +208,7 @@ const UserDetailPage = () => {
             giao thành công
           </Chip>
         );
-      case "IN_CANCELLED":
+      case "IS_CANCELLED":
         return (
           <Chip className="capitalize" color="danger" size="sm" variant="flat">
             Đã hủy đơn
@@ -240,6 +322,7 @@ const UserDetailPage = () => {
           </div>
           <EditUser isModalOpen={editUser} setIsModalOpen={setEditUser} />
         </div>
+        {/* table orders */}
         <div className="w-full lg:w-3/5 min-h-[24rem] b lg:ml-2 mt-2 lg:mt-4">
           <Tabs aria-label="Options">
             <Tab key="order" title="Đơn hàng">
@@ -289,7 +372,9 @@ const UserDetailPage = () => {
                             </div>
                           </TableCell>
                           <TableCell>{order.address}</TableCell>
-                          <TableCell>{getStatus(order.status)}</TableCell>
+                          <TableCell>
+                            {getStatus(order.status, order.id)}
+                          </TableCell>
                           <TableCell>
                             <Chip
                               variant="faded"
@@ -297,6 +382,7 @@ const UserDetailPage = () => {
                               size="sm"
                               className="cursor-pointer ml-6  transition-all duration-75"
                               onClick={() => {
+                                console.log("order", order);
                                 setIsOpenOrder(true);
                                 setDetailOrder(order.OrderDetail);
                               }}
