@@ -7,13 +7,14 @@ export type ProductDetailType = {
   price: string;
   rating: Rating[];
   sizes: Size[];
+  Discount: Discount;
 };
 
 export type Color = {
   color: string;
   codeColor: string;
   images: Image[];
-}
+};
 
 export type Image = {
   filePath: string;
@@ -42,3 +43,12 @@ export type UserComment = {
   email: string;
   avt?: string;
 };
+
+export type Discount = {
+  dateStart: string;
+  dateEnd: string;
+  description: string;
+  name: string;
+  percent: number;
+  id?: number;
+}

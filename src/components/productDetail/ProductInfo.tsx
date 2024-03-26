@@ -12,7 +12,9 @@ import {
 import { openNotification } from "../../helpers/showNotification";
 import { updateProductInCart } from "../../apis/User.api";
 import { updateProductReq } from "../../types/TCart";
-
+import { calculateDiscountPrice, checkAvailableDiscount } from "../../helpers/CaculateDiscountPrice";
+import { FormatMoney } from "../../helpers/FormatCurrency";
+ 
 interface ProductInfoProps {
   product: ProductDetailType;
 }
@@ -122,11 +124,17 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
         />
       </div>
       <div className="w-full mt-4">
-        <div className="text-2xl font-bold">
-          {product?.price}
-          <span className="text-slate-400 line-through ml-4">13.4444đ</span>
-          <span className=" text-red-600 text-xl">-30%</span>
-        </div>
+        {checkAvailableDiscount(product?.Discount) ? (
+          <div className="text-2xl font-bold">
+            {FormatMoney(calculateDiscountPrice(Number(product?.price), product.Discount.percent))}
+            <span className="text-slate-400 line-through ml-4">{FormatMoney(Number(product?.price))}</span>
+            <span className=" text-red-600 text-xl">-{product.Discount.percent}%</span>
+          </div>
+        ) : (
+          <div className="text-2xl font-bold">
+            {product?.price}
+          </div>
+        )}
       </div>
       <div className="w-full mt-4 font-medium">
         <h1>Màu sắc: {colorStore.color}</h1>

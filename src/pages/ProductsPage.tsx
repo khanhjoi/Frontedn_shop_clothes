@@ -66,6 +66,8 @@ const ProductsPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  console.log(products)
+
   return (
     <>
       <Header />
